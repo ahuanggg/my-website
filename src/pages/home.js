@@ -1,11 +1,11 @@
 import React from 'react';
 
-const home = () => {
+const Home = () => {
     return (
         <div>
-            <h1> This is my personal website!</h1>
+            <h1 class='varela-round-regular'> This is my personal website!</h1>
         </div>
     );
 };
 
-export default home;
+export default Home;
