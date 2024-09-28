@@ -41,7 +41,7 @@ const Terminal = () => {
         return Math.floor(Math.random() * max);
     };
 
-    // Function to animate the typewriter effect
+    // typewriter animation function
     const typeWriterEffect = (text, index) => {
         const characters = text.split('');
         let typedText = '';
@@ -87,35 +87,30 @@ const Terminal = () => {
             output = { type: 'text', value: `Command not recognized: ${command}` };
         }
 
-        // Add command to history with type `text`
-        setHistory((prev) => [
-            ...prev,
-            { type: 'text', value: `> ${command}` }, // User command
-            output, // The generated output
-        ]);
+        setHistory((prev) => [...prev, { type: 'text', value: `> ${command}` }, output]);
 
-        // If the output is of type 'text', apply typewriter effect
+        // apply typewriter here
         if (output.type === 'html') {
-            const index = history.length + 1; // Determine the index of the new history item
+            const index = history.length + 1;
             setTimeout(() => {
                 typeWriterEffect(output.value, index);
-            }, 5); // Apply the typewriter effect with a delay
+            }, 5);
         }
 
         // Update command history and reset indices
         setCommandHistory((prev) => {
             const updatedHistory = [...prev, command];
-            if (updatedHistory.length > 10) updatedHistory.shift(); // Keep only the last 10 commands
+            if (updatedHistory.length > 10) updatedHistory.shift();
             return updatedHistory;
         });
-        setHistoryIndex(-1); // Reset the history index
-        setTabIndex(-1); // Reset Tab cycling
+        setHistoryIndex(-1);
+        setTabIndex(-1);
     };
 
     const handleInput = (e) => {
         if (e.key === 'Enter') {
             handleCommand(input.trim());
-            setInput(''); // Clear input after processing command
+            setInput('');
         } else if (e.key === 'ArrowUp') {
             // Navigate backward through command history
             if (historyIndex < commandHistory.length - 1) {
@@ -131,10 +126,10 @@ const Terminal = () => {
                 setInput(commandHistory[commandHistory.length - 1 - newIndex]);
             } else if (historyIndex === 0) {
                 setHistoryIndex(-1);
-                setInput(''); // Clear input when history index is reset
+                setInput('');
             }
         } else if (e.key === 'Tab') {
-            e.preventDefault(); // Prevent default tab behavior
+            e.preventDefault();
             const filteredCommands = possibleCommands.filter((cmd) => cmd.startsWith(input.trim()));
             if (filteredCommands.length > 0) {
                 const nextTabIndex = (tabIndex + 1) % filteredCommands.length;
@@ -155,10 +150,7 @@ const Terminal = () => {
                 <div className='terminal-header'>Andy's Terminal</div>
                 <div className='terminal' ref={terminalRef}>
                     {history.map((item, index) => (
-                        <div key={index}>
-                            {/* Render HTML safely for HTML type entries */}
-                            {item.type === 'html' ? <span dangerouslySetInnerHTML={{ __html: item.value }} /> : <span>{item.value}</span>}
-                        </div>
+                        <div key={index}>{item.type === 'html' ? <span dangerouslySetInnerHTML={{ __html: item.value }} /> : <span>{item.value}</span>}</div>
                     ))}
                 </div>
                 <div className='input-area'>
