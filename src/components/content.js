@@ -50,12 +50,12 @@ In my free time, you can usually find me on the handball court or hunting for th
 - blah
 - blah
 
-<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/junglejamrit/ target="_blank""'>Jungle Jam</a></b> | May 2022 | 
+<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/junglejamrit/" target="_blank"'>Jungle Jam</a></b> | May 2022 | 
 - Collaborated with a team of 7 to develop an interactive game using <b style='color:#6fb9fc;'><i>Python</i></b>, <b style='color:#6fb9fc;'><i>OpenCV</i></b>, and <b style='color:#6fb9fc;'><i>PyGame</i></b>, where players use an oversized slingshot to launch food at projected jungle animals.
 - Developed object recognition functionality using <b style='color:#6fb9fc;'><i>OpenCV</i></b> to detect and track the thrown objects' position and impact.          
 - Designed and implemented gameplay features in <b style='color:#6fb9fc;'><i>PyGame</i></b>, incorporating object tracking and jungle-themed elements to enhance user engagement.
 
-<b>Online Chatroom</b> | April 2021 <a href='/public/chatroom.mp4'> here</a>
+<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://ahuanggg.github.io/my-website/chatroom.mp4" target="_blank"'>Online Chatroom</a></b> | April 2021 
 - Architected and developed a full-stack web application using <b style='color:#6fb9fc;'><i>ReactJS</i></b>, <b style='color:#6fb9fc;'><i>MongoDB</i></b>, <b style='color:#6fb9fc;'><i>Redis</i></b>, and <b style='color:#6fb9fc;'><i>Handlebars</i></b> to enable peer communication during the pandemic.
 - Designed and integrated user account management systems utilizing <b style='color:#6fb9fc;'><i>Promises</i></b> and <b style='color:#6fb9fc;'><i>REST APIs</i></b>, enhancing security and user experience.
 - Performed detailed end-to-end testing to ensure smooth and reliable integration across front-end and back-end components.
@@ -68,8 +68,8 @@ In my free time, you can usually find me on the handball court or hunting for th
 Find me here ! ! ! <b style='color:#6fb9fc;'>⸜( ˃ ᵕ ˂ )⸝</b>
 ---------------------------------
 
-Connect with me professionally: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/ target="_blank"">Linkedin</a>
-See more into my life: <a  style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/a.huanggg/ target="_blank"">Instagram</a>
+Connect with me professionally: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/" target="_blank">Linkedin</a>
+See more into my life: <a  style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/a.huanggg/" target="_blank">Instagram</a>
 Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="mailto:andyhuangling@gmail.com" target="_blank">Email andyhuangling@gmail.com</a>
         `,
     },
@@ -96,6 +96,8 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
 
 <b>Technical Skills</b> : Angular • React • TypeScript • C# • SQL • Python • HTML/CSS • .Net6 • Git
 <b>Programs</b> : Visual Studio Code • Visual Studio • Adobe Photoshop • Adobe Illustrator
+
+<a style="color: #FCB26F; font-size: 20px; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="" target="_blank"'>full resume here!</a>
 
 `,
     },

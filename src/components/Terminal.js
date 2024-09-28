@@ -90,7 +90,7 @@ const Terminal = () => {
         setHistory((prev) => [...prev, { type: 'text', value: `> ${command}` }, output]);
 
         // apply typewriter here
-        if (output.type === 'html') {
+        if (output.type === 'text') {
             const index = history.length + 1;
             setTimeout(() => {
                 typeWriterEffect(output.value, index);
