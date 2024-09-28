@@ -1,17 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Content from './content';
+import Art from './art';
+import DadJoke from './joke';
 
 const Terminal = () => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         { type: 'text', value: "Welcome to Andy's Terminal!" },
-        { type: 'text', value: 'You can use the following commands:' },
-        { type: 'text', value: '- cd home' },
-        { type: 'text', value: '- cd about' },
-        { type: 'text', value: '- cd projects' },
-        { type: 'text', value: '- cd contact' },
-        { type: 'text', value: '- cd resume' },
-        { type: 'text', value: '- run jokeoftheday.js' },
-        { type: 'text', value: '- run drawmesomething.js' },
+        { type: 'html', value: 'You can use the following commands to look around !' },
+        {
+            type: 'html',
+            value: `
+ ╱|、  
+(˚ˎ 。7  
+ |、˜〵          
+ じしˍ,)ノ `,
+        },
+        { type: 'html', value: '---------------------------------' },
+        { type: 'html', value: `- '<b style='color:#FCB26F'>ls</b>' to look at what is in the current directory` },
+        { type: 'html', value: `- '<b style='color:#FCB26F'>cd</b>' to go into a directory` },
+        { type: 'html', value: `- '<b style='color:#FCB26F'>run</b>' to run a javascript file` },
     ]);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
@@ -20,86 +28,17 @@ const Terminal = () => {
     const terminalRef = useRef(null);
 
     // List of possible commands
-    const possibleCommands = ['cd home', 'cd about', 'cd projects', 'cd contact', 'cd resume', 'run jokeoftheday.js', 'run drawmesomething.js'];
+    const possibleCommands = ['cd home', 'cd about', 'cd projects', 'cd contact', 'cd resume', 'run jokeoftheday.js', 'run drawmesomething.js', 'ls'];
 
     // Define content for directories
-    const content = {
-        home: {
-            type: 'html',
-            value: `
-            
-            
-            
-            `,
-        },
-        about: {
-            type: 'html',
-            value: `
-            
-            
-            
-            `,
-        },
-        projects: {
-            type: 'html',
-            value: `
-<b style='color:#FCB26F; font-size: 20px;'><i>Projects</i></b>
----------------------------------   
+    const content = Content;
 
-<b>Personal Website</b> | Sept 2022
-- blah
-- blah
-- blah
+    // Define art for drawmesomething.js
+    const art = Art;
 
-<b>Jungle Jam</b> | May 2022
-- Collaborated with a team of 7 to develop an interactive game using <b style='color:#6fb9fc;'><i>Python</i></b>, <b style='color:#6fb9fc;'><i>OpenCV</i></b>, and <b style='color:#6fb9fc;'><i>PyGame</i></b>, where players use an oversized slingshot to launch food at projected jungle animals.
-- Developed object recognition functionality using <b style='color:#6fb9fc;'><i>OpenCV</i></b> to detect and track the thrown objects' position and impact.          
-- Designed and implemented gameplay features in <b style='color:#6fb9fc;'><i>PyGame</i></b>, incorporating object tracking and jungle-themed elements to enhance user engagement.
-
-<b>Online Chatroom</b> | April 2021
-- Architected and developed a full-stack web application using <b style='color:#6fb9fc;'><i>ReactJS</i></b>, <b style='color:#6fb9fc;'><i>MongoDB</i></b>, <b style='color:#6fb9fc;'><i>Redis</i></b>, and <b style='color:#6fb9fc;'><i>Handlebars</i></b> to enable peer communication during the pandemic.
-- Designed and integrated user account management systems utilizing <b style='color:#6fb9fc;'><i>Promises</i></b> and <b style='color:#6fb9fc;'><i>REST APIs</i></b>, enhancing security and user experience.
-- Performed detailed end-to-end testing to ensure smooth and reliable integration across front-end and back-end components.
-
-`,
-        },
-        contact: {
-            type: 'html',
-            value: `
-Find me here ! ! ! <b style='color:#6fb9fc;'>⸜( ˃ ᵕ ˂ )⸝</b>
----------------------------------
-
-Connect with me professionally: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/ target="_blank"">Linkedin</a>
-See more into my life: <a  style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/a.huanggg/ target="_blank"">Instagram</a>
-Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="mailto:andyhuangling@gmail.com" target="_blank">Email Andy</a>
-            `,
-        },
-        resume: {
-            type: 'html',
-            value: `
-<b style='color:#FCB26F; font-size: 20px;'><i>Experience</i></b>
----------------------------------
-
-<b>Software Engineer @ KeHE</b> | May 2023 - Present
-- Developed and enhanced UI components, including modals and interactive elements using <b style='color:#6fb9fc;'><i>AngularJS</i></b> and <b style='color:#6fb9fc;'><i>BootStrap</i></b>. Resulted in a 42% improvement in customer usabillity and satisfaction.
-- Build robust APIs with the <b style='color:#6fb9fc;'><i>.NET</i></b> Frame work, interfrated them with <b style='color:#6fb9fc;'><i>NySQL</i></b> to provide seamless front-end to back-end connectivity, significantly improving user experience.
-- Upgraded projects from <b style='color:#6fb9fc;'><i>.NET 2</i></b> to <b style='color:#6fb9fc;'><i>.NET 6</i></b>, improved security and refactored code to leverage new <b style='color:#6fb9fc;'><i>.NET 6</i></b> functions and libraries.
-- Generated over $24 million in revenue utilizing <b style='color:#6fb9fc;'><i>C#</i></b>, <b style='color:#6fb9fc;'><i>AngularJS</i></b>, <b style='color:#6fb9fc;'><i>BootStrap</i></b> and <b style='color:#6fb9fc;'><i>SQL</i></b> by handling ad-hoc project enhancements provided by stakeholders.
-
-<b>UI Developer @ MarkLogic</b> | May 2021 - Aug 2021
-- Collaborated with an Agile team of 4 to implement UI enhancements on a web application, improving usability and efficiency using <b style='color:#6fb9fc;'><i>AngularJS</i></b> and <b style='color:#6fb9fc;'><i>Bootstrap</i></b>.
-- Updated and expanded end-to-end testing procedures, utilizing <b style='color:#6fb9fc;'><i>CodeceptJS</i></b> and <b style='color:#6fb9fc;'><i>Selenium</i></b> to ensure seamless compatibility with UI changes, improving the overall quality assurance process.
-- Revamped the company’s website to enhance clarity and user flow, leading to improved user experience and increased customer engagement.
-- Documented UI enhancements and changes to support team knowledge sharing and facilitate future development efforts.
-
-<b style='color:#FCB26F; font-size: 20px;'><i>Skills</i></b>
-----------------------------------
-
-<b>Technical Skills</b> : Angular • React • TypeScript • C# • SQL • Python • HTML/CSS • .Net6 • Git
-<b>Programs</b> : Visual Studio Code • Visual Studio • Adobe Photoshop • Adobe Illustrator
-
-`,
-        },
+    // Function to return a random number
+    const randomNumber = (max) => {
+        return Math.floor(Math.random() * max);
     };
 
     // Function to animate the typewriter effect
@@ -115,15 +54,14 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
                     updatedHistory[index] = { ...updatedHistory[index], value: typedText };
                     return updatedHistory;
                 });
-
-                setTimeout(() => animateText(charIndex + 1), 2); // Adjust speed of typing here
+                setTimeout(() => animateText(charIndex + 1), 5); // Adjust speed of typing here
             }
         };
 
         animateText(0);
     };
 
-    const handleCommand = (command) => {
+    const handleCommand = async (command) => {
         let output = '';
 
         if (command.startsWith('cd ')) {
@@ -136,7 +74,15 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
             }
         } else if (command.startsWith('run ')) {
             let temp = command.replace('run', '').trim();
-            output = { type: 'text', value: `Running: ${temp}` };
+            if (temp === 'jokeoftheday.js') {
+                const results = await DadJoke('https://icanhazdadjoke.com/');
+                output = { type: 'text', value: `\nRunning: ${temp}\n---------------------------------\n${results.joke}\n ` }; //change something here for the joke
+            } else if (temp === 'drawmesomething.js') {
+                let num = randomNumber(art.length);
+                output = { type: 'html', value: `\nRunning: ${temp}:\n---------------------------------\n${art[num].value}\n ` }; // change something here for the art. might have to do a random number gen to get a random picture
+            }
+        } else if (command.startsWith('ls')) {
+            output = { type: 'text', value: content.ls.value };
         } else {
             output = { type: 'text', value: `Command not recognized: ${command}` };
         }
@@ -153,7 +99,7 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
             const index = history.length + 1; // Determine the index of the new history item
             setTimeout(() => {
                 typeWriterEffect(output.value, index);
-            }, 500); // Apply the typewriter effect with a delay
+            }, 5); // Apply the typewriter effect with a delay
         }
 
         // Update command history and reset indices
