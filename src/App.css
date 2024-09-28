@@ -31,7 +31,7 @@ body {
   color: whitesmoke; /* Terminal green */
   text-align: center;
   font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 26px; /* Golden ratio applied: 16px * 1.618 */
+  font-size: 20px; /* Golden ratio applied: 16px * 1.618 */
   padding: 10px 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -44,7 +44,7 @@ body {
   width: 100%;
   overflow-y: auto; /* Enable vertical scrolling */
   font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 14px; /* Slightly smaller for terminal content */
+  font-size: 16px; /* Slightly smaller for terminal content */
   line-height: 1.5;
   white-space: pre-wrap;
   padding: 10px;  /* Padding added */
@@ -107,4 +107,100 @@ body {
 .terminal {
   scrollbar-width: thin;
   scrollbar-color: #555 #1e1e1e;
+}
+
+
+/* Container for the background */
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Ensure overflowing clouds and leaves are hidden */
+  z-index: -2; /* Place behind the terminal */
+}
+
+/* Static background image */
+.background-image {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: url("./../public/background.png");
+  background-size: cover; /* Ensures the image covers the entire container */
+  background-position: bottom center; /* Zooms towards the bottom center */
+  z-index: -2; /* Base background layer */
+}
+
+/* Cloud Layer */
+.clouds {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1; /* Layer above the static background */
+  overflow: hidden;
+}
+
+/* Individual cloud styling */
+.cloud {
+  position: absolute;
+  top: 20%;
+  height: 200px;
+  width: 500px;
+  background: url('https://www.transparenttextures.com/patterns/clouds.png') repeat-x;
+  animation: moveClouds 60s linear infinite; /* Clouds move infinitely */
+}
+
+/* Cloud animation */
+@keyframes moveClouds {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Leaf layer */
+.leaves {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  pointer-events: none; /* Prevent leaves from interfering with clicks */
+}
+
+/* Individual leaf */
+.leaf {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/2/24/Red_Leaf_Vector.svg') no-repeat;
+  background-size: contain;
+  animation: fallLeaf 15s linear infinite, swayLeaf 3s ease-in-out infinite; /* Fall and sway animations */
+  pointer-events: none;
+}
+
+/* Leaf falling animation */
+@keyframes fallLeaf {
+  0% {
+    top: -10%;
+    transform: rotate(0deg);
+    left: calc(50% - 15px); /* Start from the center */
+  }
+  100% {
+    top: 110%;
+    transform: rotate(360deg);
+    left: calc(80% - 15px); /* End off to the side */
+  }
+}
+
+/* Leaf sway animation */
+@keyframes swayLeaf {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(20px);
+  }
 }
