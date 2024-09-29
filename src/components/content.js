@@ -42,13 +42,12 @@ In my free time, you can usually find me on the handball court or hunting for th
         value: `
 <b style='color:#FCB26F; font-size: 20px;'><i>Projects</i></b>
 ---------------------------------   
-<b>A terrible experience</b> | ? ? ?
-- coming soon
+<b style="color: #FCB26F">A terrible experience</b> | ? ? ?
+- coming soon ٩(^ᗜ^ )و´-
 
-<b>Personal Website</b> | Sept 2022
-- blah
-- blah
-- blah
+<b style="color: #FCB26F">Personal Website</b> | Sept 2022
+- Developed a web-based terminal interface using <b style='color:#6fb9fc;'><i>ReactJS</i></b>, <b style='color:#6fb9fc;'><i>JavaScript</i></b>, and <b style='color:#6fb9fc;'><i>CSS</i></b> to showcase professional experience, skills, and personal information.
+- Integrated <b style='color:#6fb9fc;'><i>REST API</i></b>  calls with <b style='color:#6fb9fc;'><i>Promises</i></b>  to dynamically fetch and display a "Joke of the Day" from a public endpoint.
 
 <b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/junglejamrit/" target="_blank"'>Jungle Jam</a></b> | May 2022 | 
 - Collaborated with a team of 7 to develop an interactive game using <b style='color:#6fb9fc;'><i>Python</i></b>, <b style='color:#6fb9fc;'><i>OpenCV</i></b>, and <b style='color:#6fb9fc;'><i>PyGame</i></b>, where players use an oversized slingshot to launch food at projected jungle animals.
