@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Content from './content';
 import Art from './art';
 import DadJoke from './joke';
+import Leaf from './leaf';
 
 const Terminal = () => {
     const [input, setInput] = useState('');
@@ -37,6 +38,28 @@ const Terminal = () => {
 
     // Define art for drawmesomething.js
     const art = Art;
+
+    // Leaf images to use for animation
+    const leafImages = useMemo(() => ['leaf1.png', 'leaf2.png', 'leaf3.png'], []);
+    const [leaves, setLeaves] = useState([]);
+    useEffect(() => {
+        // Function to generate leaf styles
+        const generateLeafStyles = () => {
+            const leavesArray = [];
+            for (let i = 0; i < 6; i++) {
+                // Create 10 leaves
+                const leafStyle = {
+                    left: `${Math.random() * 100}vw`, // Random horizontal position
+                    animationDuration: `${Math.random() * 5 + 6}s`, // Random fall duration between 5-10 seconds
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/${leafImages[Math.floor(Math.random() * leafImages.length)]})`, // Random leaf image
+                };
+                leavesArray.push(<Leaf key={i} style={leafStyle} />);
+            }
+            return leavesArray;
+        };
+        // Set the leaves once on component mount
+        setLeaves(generateLeafStyles());
+    }, [leafImages]);
 
     // Function to return a random number
     const randomNumber = (max) => {
@@ -182,6 +205,7 @@ const Terminal = () => {
                     <input type='text' value={input} ref={inputRef} onChange={(e) => setInput(e.target.value)} onKeyDown={handleInput} className='terminal-input' autoFocus />
                 </div>
             </div>
+            {leaves}
         </div>
     );
 };
