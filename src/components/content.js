@@ -97,7 +97,7 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
 <b>Technical Skills</b> : Angular • React • TypeScript • C# • SQL • Python • HTML/CSS • .Net6 • Git
 <b>Programs</b> : Visual Studio Code • Visual Studio • Adobe Photoshop • Adobe Illustrator
 
-<a style="color: #FCB26F; font-size: 20px; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://ahuanggg.github.io/my-website/resume.pdf" target="_blank"'>full resume here!</a>
+<a style="color: #FCB26F; font-size: 16px; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://ahuanggg.github.io/my-website/resume.pdf" target="_blank"'>full resume here!</a>
 
 `,
     },

@@ -6,7 +6,7 @@ import DadJoke from './joke';
 const Terminal = () => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
-        { type: 'text', value: "Welcome to Andy's Terminal!" },
+        { type: 'html', value: "Welcome to Andy's Terminal!" },
         { type: 'html', value: 'You can use the following commands to look around !' },
         {
             type: 'html',
@@ -20,12 +20,14 @@ const Terminal = () => {
         { type: 'html', value: `- '<b style='color:#FCB26F'>ls</b>' to look at what is in the current directory` },
         { type: 'html', value: `- '<b style='color:#FCB26F'>cd</b>' to go into a directory` },
         { type: 'html', value: `- '<b style='color:#FCB26F'>run</b>' to run a javascript file` },
+        { type: 'html', value: `- you can also use tab to autofill the command you want to run !` },
     ]);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [tabIndex, setTabIndex] = useState(-1);
     const terminalRef = useRef(null);
+    const inputRef = useRef(null); // Reference for the input area
 
     // List of possible commands
     const possibleCommands = ['cd home', 'cd about', 'cd projects', 'cd contact', 'cd resume', 'run jokeoftheday.js', 'run drawmesomething.js', 'ls'];
@@ -42,19 +44,24 @@ const Terminal = () => {
     };
 
     // typewriter animation function
-    const typeWriterEffect = (text, index) => {
-        const characters = text.split('');
+    const typeWriterEffect = (text, index, speed = 10, step = 10) => {
+        // `step` is the number of characters to add at once
         let typedText = '';
 
         const animateText = (charIndex) => {
-            if (charIndex < characters.length) {
-                typedText += characters[charIndex];
+            if (charIndex < text.length) {
+                // Append the next group of `step` characters to the typed text
+                typedText += text.slice(charIndex, charIndex + step);
+
+                // Update the component state
                 setHistory((prevHistory) => {
                     const updatedHistory = [...prevHistory];
                     updatedHistory[index] = { ...updatedHistory[index], value: typedText };
                     return updatedHistory;
                 });
-                setTimeout(() => animateText(charIndex + 1), 5); // Adjust speed of typing here
+
+                // Move the cursor forward by `step` characters
+                setTimeout(() => animateText(charIndex + step), speed);
             }
         };
 
@@ -70,27 +77,27 @@ const Terminal = () => {
                 setCurrentDirectory(dir);
                 output = content[dir].type === 'html' ? content[dir] : { type: 'text', value: content[dir] };
             } else {
-                output = { type: 'text', value: `Directory not found: ${dir}` };
+                output = { type: 'html', value: `Directory not found: ${dir}` };
             }
         } else if (command.startsWith('run ')) {
             let temp = command.replace('run', '').trim();
             if (temp === 'jokeoftheday.js') {
                 const results = await DadJoke('https://icanhazdadjoke.com/');
-                output = { type: 'text', value: `\nRunning: ${temp}\n---------------------------------\n${results.joke}\n ` }; //change something here for the joke
+                output = { type: 'html', value: `\nRunning: ${temp}\n---------------------------------\n${results.joke}\n ` }; //change something here for the joke
             } else if (temp === 'drawmesomething.js') {
                 let num = randomNumber(art.length);
                 output = { type: 'html', value: `\nRunning: ${temp}:\n---------------------------------\n${art[num].value}\n ` }; // change something here for the art. might have to do a random number gen to get a random picture
             }
         } else if (command.startsWith('ls')) {
-            output = { type: 'text', value: content.ls.value };
+            output = { type: 'html', value: content.ls.value };
         } else {
-            output = { type: 'text', value: `Command not recognized: ${command}` };
+            output = { type: 'html', value: `Command not recognized: ${command}` };
         }
 
-        setHistory((prev) => [...prev, { type: 'text', value: `> ${command}` }, output]);
+        setHistory((prev) => [...prev, { type: 'html', value: `> ${command}` }, output]);
 
         // apply typewriter here
-        if (output.type === 'text') {
+        if (output.type === 'html') {
             const index = history.length + 1;
             setTimeout(() => {
                 typeWriterEffect(output.value, index);
@@ -140,6 +147,23 @@ const Terminal = () => {
     };
 
     useEffect(() => {
+        // Function to focus the input area
+        const handleKeyPress = () => {
+            if (inputRef.current) {
+                inputRef.current.focus(); // Focus the input area whenever a key is pressed
+            }
+        };
+
+        // Add event listener for keydown on the entire window
+        window.addEventListener('keydown', handleKeyPress);
+
+        // Remove event listener on component unmount
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []); // Empty dependency array to add/remove event listener once on mount/unmount
+
+    useEffect(() => {
         terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }, [history]);
 
@@ -155,7 +179,7 @@ const Terminal = () => {
                 </div>
                 <div className='input-area'>
                     <span>{`/ ${currentDirectory} > `}</span>
-                    <input type='text' value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleInput} className='terminal-input' autoFocus />
+                    <input type='text' value={input} ref={inputRef} onChange={(e) => setInput(e.target.value)} onKeyDown={handleInput} className='terminal-input' autoFocus />
                 </div>
             </div>
         </div>
