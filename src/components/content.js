@@ -1,5 +1,8 @@
+//style='color:#FCB26F;' orange
+//style='color:#6fb9fc;' blue
+
 const Content = {
-    ls: { type: 'html', value: `---------------------------------\n- /home\n- /about\n- /projects\n- /resume\n- jokeoftheday.js\n- drawmesomething.js\n ` },
+    ls: { type: 'html', value: `---------------------------------\n- <span style='color:#FCB26F;'>/home</span>\n- <span style='color:#FCB26F;'>/about</span>\n- <span style='color:#FCB26F;'>/projects</span>\n- <span style='color:#FCB26F;'>/resume</span>\n- <span style='color:#6fb9fc;'>jokeoftheday.js\n- <span style='color:#6fb9fc;'>drawmesomething.js</span>\n ` },
     home: {
         type: 'html',
         value: `

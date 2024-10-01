@@ -4,6 +4,9 @@ import Art from './art';
 import DadJoke from './joke';
 import Leaf from './leaf';
 
+//style='color:#FCB26F;' orange
+//style='color:#6fb9fc;' blue
+
 const Terminal = () => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
@@ -18,17 +21,18 @@ const Terminal = () => {
  じしˍ,)ノ `,
         },
         { type: 'html', value: '---------------------------------' },
-        { type: 'html', value: `- '<b style='color:#FCB26F'>ls</b>' to look at what is in the current directory` },
-        { type: 'html', value: `- '<b style='color:#FCB26F'>cd</b>' to go into a directory` },
-        { type: 'html', value: `- '<b style='color:#FCB26F'>run</b>' to run a javascript file` },
-        { type: 'html', value: `- you can also use tab to autofill the command you want to run !` },
+        { type: 'html', value: `- type <i style='color:#FCB26F'>'ls'</i> to look at what is in the current directory` },
+        { type: 'html', value: `- <i style='color:#FCB26F'>'cd {directory name}'</i> to go into a directory` },
+        { type: 'html', value: `- <i style='color:#6fb9fc;'>'run {program name}'</i> to run a javascript file` },
+        { type: 'html', value: `- anything highlighted when you type 'ls' <i style='color:#FCB26F;'>orange</i> can be used with <i style='color:#FCB26F;'>cd</i> and anything highlighted in <i style='color:#6fb9fc;'>blue</i> can be used with <i style='color:#6fb9fc;'>run</i>` },
+        { type: 'html', value: `- an example might look like <i style='color:#FCB26F'>'cd home'</i> or <i style='color:#6fb9fc;'>'run drawmesomething.js'</i>\n ` },
     ]);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [tabIndex, setTabIndex] = useState(-1);
-    const terminalRef = useRef(null);
-    const inputRef = useRef(null); // Reference for the input area
+    const terminalRef = useRef(null); // referencing terminal
+    const inputRef = useRef(null); // referencing input
 
     // List of possible commands
     const possibleCommands = ['cd home', 'cd about', 'cd projects', 'cd contact', 'cd resume', 'run jokeoftheday.js', 'run drawmesomething.js', 'ls'];
@@ -43,21 +47,19 @@ const Terminal = () => {
     const leafImages = useMemo(() => ['leaf1.png', 'leaf2.png', 'leaf3.png'], []);
     const [leaves, setLeaves] = useState([]);
     useEffect(() => {
-        // Function to generate leaf styles
         const generateLeafStyles = () => {
             const leavesArray = [];
             for (let i = 0; i < 6; i++) {
-                // Create 10 leaves
+                const randomLeft = Math.random() * 100;
                 const leafStyle = {
-                    left: `${Math.random() * 100}vw`, // Random horizontal position
-                    animationDuration: `${Math.random() * 5 + 6}s`, // Random fall duration between 5-10 seconds
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/${leafImages[Math.floor(Math.random() * leafImages.length)]})`, // Random leaf image
+                    left: `${randomLeft}vw`,
+                    animationDuration: `${Math.random() * 5 + 6}s`,
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/${leafImages[Math.floor(Math.random() * leafImages.length)]})`,
                 };
                 leavesArray.push(<Leaf key={i} style={leafStyle} />);
             }
             return leavesArray;
         };
-        // Set the leaves once on component mount
         setLeaves(generateLeafStyles());
     }, [leafImages]);
 
@@ -68,26 +70,19 @@ const Terminal = () => {
 
     // typewriter animation function
     const typeWriterEffect = (text, index, speed = 10, step = 10) => {
-        // `step` is the number of characters to add at once
         let typedText = '';
 
         const animateText = (charIndex) => {
             if (charIndex < text.length) {
-                // Append the next group of `step` characters to the typed text
                 typedText += text.slice(charIndex, charIndex + step);
-
-                // Update the component state
                 setHistory((prevHistory) => {
                     const updatedHistory = [...prevHistory];
                     updatedHistory[index] = { ...updatedHistory[index], value: typedText };
                     return updatedHistory;
                 });
-
-                // Move the cursor forward by `step` characters
                 setTimeout(() => animateText(charIndex + step), speed);
             }
         };
-
         animateText(0);
     };
 
@@ -119,7 +114,6 @@ const Terminal = () => {
 
         setHistory((prev) => [...prev, { type: 'html', value: `> ${command}` }, output]);
 
-        // apply typewriter here
         if (output.type === 'html') {
             const index = history.length + 1;
             setTimeout(() => {
@@ -127,7 +121,6 @@ const Terminal = () => {
             }, 5);
         }
 
-        // Update command history and reset indices
         setCommandHistory((prev) => {
             const updatedHistory = [...prev, command];
             if (updatedHistory.length > 10) updatedHistory.shift();
@@ -142,14 +135,12 @@ const Terminal = () => {
             handleCommand(input.trim());
             setInput('');
         } else if (e.key === 'ArrowUp') {
-            // Navigate backward through command history
             if (historyIndex < commandHistory.length - 1) {
                 const newIndex = historyIndex + 1;
                 setHistoryIndex(newIndex);
                 setInput(commandHistory[commandHistory.length - 1 - newIndex]);
             }
         } else if (e.key === 'ArrowDown') {
-            // Navigate forward through command history
             if (historyIndex > 0) {
                 const newIndex = historyIndex - 1;
                 setHistoryIndex(newIndex);
@@ -170,21 +161,16 @@ const Terminal = () => {
     };
 
     useEffect(() => {
-        // Function to focus the input area
         const handleKeyPress = () => {
             if (inputRef.current) {
-                inputRef.current.focus(); // Focus the input area whenever a key is pressed
+                inputRef.current.focus();
             }
         };
-
-        // Add event listener for keydown on the entire window
         window.addEventListener('keydown', handleKeyPress);
-
-        // Remove event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []); // Empty dependency array to add/remove event listener once on mount/unmount
+    }, []);
 
     useEffect(() => {
         terminalRef.current.scrollTop = terminalRef.current.scrollHeight;

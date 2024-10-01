@@ -1,12 +1,26 @@
 /* Body Background with the Image */
 body {
-  background: url("./../public/background.png") no-repeat center center fixed; /* Correct way to reference the image in React */
-  background-size: cover; /* Ensures the image covers the entire background */
-  background-position: center; /* Centers the background image */
-  background-repeat: no-repeat; /* Prevents image from repeating */
-  overflow: hidden; /* Hide any overflow caused by wide elements */
+  background: url("./../public/background.png") no-repeat center center fixed; 
+  background-size: cover; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow: hidden;
   margin: 0;
   padding: 0;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; 
+  position: relative;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 /* Terminal Container */
@@ -15,27 +29,26 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 70vh; /* 70% of viewport height */
-  width: 60vw;  /* 60% of viewport width */
-  background-color: rgba(30, 30, 30, 0.9); /* Semi-transparent background for terminal */
-  color: whitesmoke; /* Terminal-like green text */
+  height: 70vh;
+  width: 60vw;  
+  background-color: rgba(30, 30, 30, 0.85); 
+  color: whitesmoke; 
   border-radius: 10px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   margin: 0 auto;
   position: relative;
-  top: 15vh; /* Centering vertically */
-  opacity: 0.9;
+  top: 15vh;
 }
 
 /* Terminal Header */
 .terminal-header {
   width: 100%;
-  background-color: #333; /* Slightly darker than terminal background */
-  color: whitesmoke; /* Terminal green */
+  background-color: #333; 
+  color: whitesmoke;
   text-align: center;
-  font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 20px; /* Golden ratio applied: 16px * 1.618 */
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 20px; 
   padding: 10px 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -46,13 +59,13 @@ body {
 .terminal {
   flex-grow: 1;
   width: 100%;
-  overflow-y: auto; /* Enable vertical scrolling */
-  font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 16px; /* Slightly smaller for terminal content */
+  overflow-y: auto; 
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 16px;
   line-height: 1.5;
   white-space: pre-wrap;
-  padding: 10px;  /* Padding added */
-  box-sizing: border-box; /* Ensure padding is respected */
+  padding: 10px; 
+  box-sizing: border-box; 
   padding-left: 15px;
 }
 
@@ -60,12 +73,12 @@ body {
 .input-area {
   display: flex;
   width: 100%;
-  font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 16px; /* Base font size */
+  font-family: Consolas, 'Courier New', monospace; 
+  font-size: 16px;
   color: whitesmoke;
   background-color: #1e1e1e;
-  padding: 10px; /* Padding applied here */
-  box-sizing: border-box; /* Ensure padding doesn't overflow */
+  padding: 10px;
+  box-sizing: border-box;
   border-top: 1px solid #444;
   padding-left: 15px;
 }
@@ -80,10 +93,10 @@ body {
   background: transparent;
   border: none;
   color: whitesmoke;
-  font-family: Consolas, 'Courier New', monospace; /* Updated font-family */
-  font-size: 16px; /* Base font size */
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 16px;
   outline: none;
-  padding-left: 10px; /* Left padding for input */
+  padding-left: 10px;
 }
 
 /* Custom scrollbar styles for a round, macOS-like feel */
@@ -121,8 +134,8 @@ body {
   left: 0;
   height: 100vh;
   width: 100vw;
-  overflow: hidden; /* Ensure overflowing clouds and leaves are hidden */
-  z-index: -2; /* Place behind the terminal */
+  overflow: hidden;
+  z-index: -2;
 }
 
 /* Static background image */
@@ -131,9 +144,9 @@ body {
   height: 100%;
   width: 100%;
   background-image: url("./../public/background.png");
-  background-size: cover; /* Ensures the image covers the entire container */
-  background-position: bottom center; /* Zooms towards the bottom center */
-  z-index: -2; /* Base background layer */
+  background-size: cover;
+  background-position: bottom center;
+  z-index: -2;
 }
 
 
@@ -143,31 +156,31 @@ body {
   height: 100%;
   width: 100%;
   z-index: -1;
-  pointer-events: none; /* Prevent leaves from interfering with clicks */
+  pointer-events: none;
 }
 
 .leaf {
   position: absolute;
-  top: -50px; /* Start off-screen */
-  width: 30px; /* Adjust the size of the leaf */
+  top: -50px; 
+  width: 30px; 
   height: 30px;
-  background-size: contain; /* Make sure the image fits within the div */
-  background-repeat: no-repeat; /* Prevent image repetition */
-  pointer-events: none; /* Allow clicks to pass through */
+  background-size: contain;
+  background-repeat: no-repeat; 
+  pointer-events: none;
   z-index: -1;
-  opacity: 0.8;
-  animation: fall 8s linear infinite, sway 2s ease-in-out infinite alternate;
+  opacity: 0.65;
+  animation: fall 8s linear infinite, sway ease-in-out infinite alternate;
 }
 
 /* Falling animation */
 @keyframes fall {
   0% {
-    top: -50px; /* Start above the terminal */
-    transform: rotate(0deg); /* Start with no rotation */
+    top: -50px; 
+    transform: rotate(0deg);
   }
   100% {
-    top: 100%; /* Move to the bottom of the container */
-    transform: rotate(360deg); /* Full rotation during the fall */
+    top: 100%;
+    transform: rotate(360deg); 
   }
 }
 
@@ -177,41 +190,41 @@ body {
     transform: translateX(0px);
   }
   100% {
-    transform: translateX(50px); /* Sway from left to right */
+    transform: translateX(150px);
   }
 }
 
 @media (max-width: 768px) {
   .terminal-container {
-    width: 90vw; /* Expand to 90% of the screen width */
-    height: 60vh; /* Adjust height to 60% of the screen height */
-    border-radius: 8px; /* Slightly reduce corner radius */
+    width: 90vw;
+    height: 60vh;
+    border-radius: 8px;
   }
 
   .terminal-header {
-    font-size: 18px; /* Smaller header font size */
-    padding: 8px 0; /* Smaller padding for header */
+    font-size: 18px;
+    padding: 8px 0;
   }
 
   .terminal {
-    font-size: 12px; /* Smaller font size for terminal content */
-    padding: 8px; /* Reduce padding for terminal content */
+    font-size: 12px; 
+    padding: 8px; 
   }
 
   .input-area {
-    font-size: 14px; /* Slightly smaller font size for input area */
-    padding: 8px; /* Reduce padding */
+    font-size: 14px; 
+    padding: 8px; 
   }
 
   .terminal-input {
-    font-size: 14px; /* Smaller input font size */
-    padding-left: 8px; /* Adjust padding */
+    font-size: 14px; 
+    padding-left: 8px; 
   }
 }
 
 @media (max-width: 480px) {
   .terminal-container {
-    width: 95vw; /* Expand to 95% of the screen width */
+    width: 95vw; 
     height: 50vh;
     top: 20vh;
   }
