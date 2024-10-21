@@ -2,8 +2,8 @@
 //style='color:#6fb9fc;' blue
 
 const Content = {
-    ls: { type: 'html', value: `---------------------------------\n- <span style='color:#FCB26F;'>/home</span>\n- <span style='color:#FCB26F;'>/about</span>\n- <span style='color:#FCB26F;'>/projects</span>\n- <span style='color:#FCB26F;'>/resume</span>\n- <span style='color:#6fb9fc;'>jokeoftheday.js\n- <span style='color:#6fb9fc;'>drawmesomething.js</span>\n ` },
-    home: {
+    'ls': { type: 'html', value: `---------------------------------\n- <span style='color:#FCB26F;'>home.txt</span>\n- <span style='color:#FCB26F;'>about.txt</span>\n- <span style='color:#FCB26F;'>projects.txt</span>\n- <span style='color:#FCB26F;'>resume.txt</span>\n- <span style='color:#6fb9fc;'>jokeoftheday.js\n- <span style='color:#6fb9fc;'>drawmesomething.js</span>\n- <span style='color:#6fb9fc;'>sendemail.js</span>\n` },
+    'home.txt': {
         type: 'html',
         value: `
 Welcome home ! <span style='color:pink'>
@@ -24,12 +24,12 @@ Welcome home ! <span style='color:pink'>
 ⠀⠀⠛⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⠦⢤⠤⠶⠋⠙⠳⣆⣀⣈⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 </span>
-From here you can type 'ls' to see what you can cd into or what files you can run!`,
+From here you can type 'ls' to see what files you can print out or what scripts you can run! \nAnything that ends in a <span style='color:#FCB26F;'>.txt</span> can be used with the command '<span style='color:#FCB26F;'>cat</span>' ie: <span style='color:#FCB26F;'>cat about.txt</span> \nAnything that ends wih a <span style='color:#6fb9fc;'>.js</span> can be used with the command '<span style='color:#6fb9fc;'>run</span>' ie: <span style='color:#6fb9fc;'>run jokeoftheday.js</span>`,
     },
-    about: {
+    'about.txt': {
         type: 'html',
         value: `
-Hi I’m <b style='color:#6fb9fc;'><i>Andy Huang Ling</i></b> !!! 
+Hi I’m <b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/" target="_blank"'>Andy Huang Ling</i></b></a> !!! 
 ---------------------------------
 a New York City native with a passion for blending creativity and technology to craft engaging user experiences.
 
@@ -40,7 +40,7 @@ I’m excited to continue growing as a Full Stack Developer, aiming to collabora
 In my free time, you can usually find me on the handball court or hunting for the best food spots around the city. 
         `,
     },
-    projects: {
+    'projects.txt': {
         type: 'html',
         value: `
 <b style='color:#FCB26F; font-size: 20px;'><i>Projects</i></b>
@@ -64,7 +64,7 @@ In my free time, you can usually find me on the handball court or hunting for th
 
 `,
     },
-    contact: {
+    'contact.txt': {
         type: 'html',
         value: `
 Find me here ! ! ! <b style='color:#6fb9fc;'>⸜( ˃ ᵕ ˂ )⸝</b>
@@ -72,10 +72,10 @@ Find me here ! ! ! <b style='color:#6fb9fc;'>⸜( ˃ ᵕ ˂ )⸝</b>
 
 Connect with me professionally: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/" target="_blank">Linkedin</a>
 See more into my life: <a  style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/a.huanggg/" target="_blank">Instagram</a>
-Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="mailto:andyhuangling@gmail.com" target="_blank">Email andyhuangling@gmail.com</a>
+Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="mailto:andyhuangling@gmail.com" target="_blank">andyhuangling@gmail.com</a>
         `,
     },
-    resume: {
+    'resume.txt': {
         type: 'html',
         value: `
 <b style='color:#FCB26F; font-size: 20px;'><i>Experience</i></b>

@@ -3,6 +3,7 @@ import Content from './content';
 import Art from './art';
 import DadJoke from './joke';
 import Leaf from './leaf';
+import { sendEmail } from './sendemail';
 
 //style='color:#FCB26F;' orange
 //style='color:#6fb9fc;' blue
@@ -22,10 +23,10 @@ const Terminal = () => {
         },
         { type: 'html', value: '---------------------------------' },
         { type: 'html', value: `- type <i style='color:#FCB26F'>'ls'</i> to look at what is in the current directory` },
-        { type: 'html', value: `- <i style='color:#FCB26F'>'cd {directory name}'</i> to go into a directory` },
-        { type: 'html', value: `- <i style='color:#6fb9fc;'>'run {program name}'</i> to run a javascript file` },
-        { type: 'html', value: `- anything highlighted when you type 'ls' <i style='color:#FCB26F;'>orange</i> can be used with <i style='color:#FCB26F;'>cd</i> and anything highlighted in <i style='color:#6fb9fc;'>blue</i> can be used with <i style='color:#6fb9fc;'>run</i>` },
-        { type: 'html', value: `- an example might look like <i style='color:#FCB26F'>'cd home'</i> or <i style='color:#6fb9fc;'>'run drawmesomething.js'</i>\n ` },
+        { type: 'html', value: `- <i style='color:#FCB26F'>'cat {file name}'</i> to print out the txt file` },
+        { type: 'html', value: `- <i style='color:#6fb9fc;'>'run {script name}'</i> to run the script` },
+        { type: 'html', value: `- anything highlighted when you type 'ls' <i style='color:#FCB26F;'>orange</i> can be used with <i style='color:#FCB26F;'>cat</i> and anything highlighted in <i style='color:#6fb9fc;'>blue</i> can be used with <i style='color:#6fb9fc;'>run</i>` },
+        { type: 'html', value: `- an example might look like <i style='color:#FCB26F'>'cat home.txt'</i> or <i style='color:#6fb9fc;'>'run drawmesomething.js'</i>\n ` },
     ]);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
@@ -35,7 +36,7 @@ const Terminal = () => {
     const inputRef = useRef(null); // referencing input
 
     // List of possible commands
-    const possibleCommands = ['cd home', 'cd about', 'cd projects', 'cd contact', 'cd resume', 'run jokeoftheday.js', 'run drawmesomething.js', 'ls'];
+    const possibleCommands = ['cat home.txt', 'cat about.txt', 'cat projects.txt', 'cat contact.txt', 'cat resume.txt', 'run jokeoftheday.js', 'run drawmesomething.js', 'run sendemail.js', 'ls'];
 
     // Define content for directories
     const content = Content;
@@ -88,31 +89,49 @@ const Terminal = () => {
 
     const handleCommand = async (command) => {
         let output = '';
-
-        if (command.startsWith('cd ')) {
-            const dir = command.split(' ')[1];
+        const dir = command.split(' ')[1];
+        setCurrentDirectory(dir);
+        if (command.startsWith('cat ')) {
             if (content[dir]) {
-                setCurrentDirectory(dir);
-                output = content[dir].type === 'html' ? content[dir] : { type: 'text', value: content[dir] };
+                output = content[dir].type === 'html' ? content[dir] : { type: 'html', value: content[dir] };
             } else {
-                output = { type: 'html', value: `Directory not found: ${dir}` };
-            }
-        } else if (command.startsWith('run ')) {
-            let temp = command.replace('run', '').trim();
-            if (temp === 'jokeoftheday.js') {
-                const results = await DadJoke('https://icanhazdadjoke.com/');
-                output = { type: 'html', value: `\nRunning: ${temp}\n---------------------------------\n${results.joke}\n ` }; //change something here for the joke
-            } else if (temp === 'drawmesomething.js') {
-                let num = randomNumber(art.length);
-                output = { type: 'html', value: `\nRunning: ${temp}:\n---------------------------------\n${art[num].value}\n ` }; // change something here for the art. might have to do a random number gen to get a random picture
+                output = { type: 'html', value: `File not found: ${dir}` };
             }
         } else if (command.startsWith('ls')) {
             output = { type: 'html', value: content.ls.value };
+        } else if (command.startsWith('run ')) {
+            let temp = command.replace('run', '').trim();
+            const regex = /^run sendemail.js (.+)$/;
+            const match = command.match(regex);
+            console.log(match);
+            if (temp === 'jokeoftheday.js') {
+                const results = await DadJoke('https://icanhazdadjoke.com/');
+                output = { type: 'html', value: `\n<span style='color:#6fb9fc;'>Running: ${temp}</span>\n---------------------------------\n${results.joke}\n ` }; //change something here for the joke
+            } else if (temp === 'drawmesomething.js') {
+                let num = randomNumber(art.length);
+                output = { type: 'html', value: `\n<span style='color:#6fb9fc;'>Running: ${temp}:</span>\n---------------------------------\n${art[num].value}\n ` }; // change something here for the art. might have to do a random number gen to get a random picture
+            } else if (match) {
+                const body = match[1];
+                try {
+                    const result = await sendEmail(body);
+                    output = { type: 'html', value: `---------------------------------\n ${result} \n` };
+                } catch (error) {
+                    output = { type: 'html', value: `---------------------------------\n ${error} \n` };
+                }
+            } else if (match === null) {
+                output = output = { type: 'html', value: `\n---------------------------------\nTo send me an email you have to add a message after '<span style='color:#FCB26F;'>run sendemail.js</span>' \nan example would be:\n'run sendemail.js Hi Andy, I really like your website and would like to connect with you! You can reach me @ {your email}\n<i style='color:#FCB26F;'>Please make sure to include a way for me to get back to you otherwise I wouldn't know who sent me the email!</i>\n` };
+            }
         } else {
             output = { type: 'html', value: `Command not recognized: ${command}` };
         }
 
-        setHistory((prev) => [...prev, { type: 'html', value: `> ${command}` }, output]);
+        if (command.startsWith('cat ')) {
+            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:#FCB26F;'>${command}</span>` }, output]);
+        } else if (command.startsWith('run ')) {
+            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:#6fb9fc;'>${command}</span>` }, output]);
+        } else {
+            setHistory((prev) => [...prev, { type: 'html', value: `> ${command}` }, output]);
+        }
 
         if (output.type === 'html') {
             const index = history.length + 1;
@@ -173,7 +192,9 @@ const Terminal = () => {
     }, []);
 
     useEffect(() => {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        }
     }, [history]);
 
     return (
