@@ -1,3 +1,44 @@
+/* Theme variables — switched at runtime by the 'theme' command */
+:root {
+  --terminal-bg: rgba(30, 30, 30, 0.85);
+  --terminal-text: whitesmoke;
+  --header-bg: #333;
+  --input-bg: #1e1e1e;
+  --border-color: #444;
+  --accent-1: #fcb26f;
+  --accent-2: #6fb9fc;
+}
+
+[data-theme='matrix'] {
+  --terminal-bg: rgba(0, 12, 2, 0.92);
+  --terminal-text: #00ff41;
+  --header-bg: #001a06;
+  --input-bg: #001204;
+  --border-color: #0a5c26;
+  --accent-1: #aaffc3;
+  --accent-2: #00e636;
+}
+
+[data-theme='dracula'] {
+  --terminal-bg: rgba(40, 42, 54, 0.92);
+  --terminal-text: #f8f8f2;
+  --header-bg: #1e1f29;
+  --input-bg: #21222c;
+  --border-color: #44475a;
+  --accent-1: #ffb86c;
+  --accent-2: #8be9fd;
+}
+
+[data-theme='light'] {
+  --terminal-bg: rgba(252, 250, 245, 0.92);
+  --terminal-text: #2a2a2a;
+  --header-bg: #e8e4da;
+  --input-bg: #efece4;
+  --border-color: #c8c2b4;
+  --accent-1: #c2611c;
+  --accent-2: #1c6fc2;
+}
+
 /* Body Background with the Image */
 body {
   background: url("./../public/background.png") no-repeat center center fixed; 
@@ -31,8 +72,8 @@ html {
   align-items: center;
   height: 70vh;
   width: 60vw;  
-  background-color: rgba(30, 30, 30, 0.85); 
-  color: whitesmoke; 
+  background-color: var(--terminal-bg);
+  color: var(--terminal-text);
   border-radius: 10px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
   overflow: hidden;
@@ -44,15 +85,15 @@ html {
 /* Terminal Header */
 .terminal-header {
   width: 100%;
-  background-color: #333; 
-  color: whitesmoke;
+  background-color: var(--header-bg);
+  color: var(--terminal-text);
   text-align: center;
   font-family: Consolas, 'Courier New', monospace;
   font-size: 20px; 
   padding: 10px 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--border-color);
 }
 
 /* Terminal Scrollable Content */
@@ -75,11 +116,11 @@ html {
   width: 100%;
   font-family: Consolas, 'Courier New', monospace; 
   font-size: 16px;
-  color: whitesmoke;
-  background-color: #1e1e1e;
+  color: var(--terminal-text);
+  background-color: var(--input-bg);
   padding: 10px;
   box-sizing: border-box;
-  border-top: 1px solid #444;
+  border-top: 1px solid var(--border-color);
   padding-left: 15px;
 }
 
@@ -92,7 +133,7 @@ html {
   flex-grow: 1;
   background: transparent;
   border: none;
-  color: whitesmoke;
+  color: var(--terminal-text);
   font-family: Consolas, 'Courier New', monospace;
   font-size: 16px;
   outline: none;
@@ -106,14 +147,14 @@ html {
 }
 
 .terminal::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--input-bg);
   border-radius: 10px;
 }
 
 .terminal::-webkit-scrollbar-thumb {
-  background-color: #555;
+  background-color: var(--border-color);
   border-radius: 999px;
-  border: 3px solid #1e1e1e;
+  border: 3px solid var(--input-bg);
 }
 
 .terminal::-webkit-scrollbar-thumb:hover {
@@ -123,7 +164,24 @@ html {
 /* Firefox scrollbar */
 .terminal {
   scrollbar-width: thin;
-  scrollbar-color: #555 #1e1e1e;
+  scrollbar-color: var(--border-color) var(--input-bg);
+}
+
+/* Snake game */
+.snake-game {
+  margin: 6px 0;
+}
+
+.snake-board {
+  margin: 0;
+  line-height: 1.05;
+  font-family: inherit;
+  color: var(--accent-2);
+}
+
+.snake-status {
+  margin-top: 4px;
+  color: var(--accent-1);
 }
 
 

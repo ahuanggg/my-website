@@ -3,10 +3,12 @@ import Content from './content';
 import Art from './art';
 import DadJoke from './joke';
 import Leaf from './leaf';
+import Snake from './Snake';
 import { sendEmail } from './sendemail';
+import { getGuestbookEntries, signGuestbook } from './guestbook';
 
-//style='color:#FCB26F;' orange
-//style='color:#6fb9fc;' blue
+// accent colors are CSS variables so themes can restyle them:
+// var(--accent-1) orange (cat/files), var(--accent-2) blue (run/scripts)
 
 // Escape user-typed text before it is rendered with dangerouslySetInnerHTML
 const escapeHtml = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -23,17 +25,53 @@ const welcomeMessage = [
  じしˍ,)ノ `,
     },
     { type: 'html', value: '---------------------------------' },
-    { type: 'html', value: `- type <i style='color:#FCB26F'>'ls'</i> to look at what is in the current directory` },
-    { type: 'html', value: `- <i style='color:#FCB26F'>'cat {file name}'</i> to print out the txt file` },
-    { type: 'html', value: `- <i style='color:#6fb9fc;'>'run {script name}'</i> to run the script` },
-    { type: 'html', value: `- anything highlighted when you type 'ls' <i style='color:#FCB26F;'>orange</i> can be used with <i style='color:#FCB26F;'>cat</i> and anything highlighted in <i style='color:#6fb9fc;'>blue</i> can be used with <i style='color:#6fb9fc;'>run</i>` },
-    { type: 'html', value: `- an example might look like <i style='color:#FCB26F'>'cat home.txt'</i> or <i style='color:#6fb9fc;'>'run drawmesomething.js'</i>` },
+    { type: 'html', value: `- type <i style='color:var(--accent-1)'>'ls'</i> to look at what is in the current directory` },
+    { type: 'html', value: `- <i style='color:var(--accent-1)'>'cat {file name}'</i> to print out the txt file` },
+    { type: 'html', value: `- <i style='color:var(--accent-2);'>'run {script name}'</i> to run the script` },
+    { type: 'html', value: `- anything highlighted when you type 'ls' <i style='color:var(--accent-1);'>orange</i> can be used with <i style='color:var(--accent-1);'>cat</i> and anything highlighted in <i style='color:var(--accent-2);'>blue</i> can be used with <i style='color:var(--accent-2);'>run</i>` },
+    { type: 'html', value: `- an example might look like <i style='color:var(--accent-1)'>'cat home.txt'</i> or <i style='color:var(--accent-2);'>'run drawmesomething.js'</i>` },
+    { type: 'html', value: `- feeling adventurous? try <i style='color:var(--accent-2);'>'run snake.js'</i>, <i>'theme'</i>, <i>'open'</i> ... and a few hidden commands 👀` },
     { type: 'html', value: `- type <i>'help'</i> to see this guide again or <i>'clear'</i> to clean up the terminal\n ` },
 ];
 
+const bootLines = [
+    'andy_os v2.0 — initializing...',
+    'CPU: caffeine-powered @ 3.50GHz ........... OK',
+    'Mounting /home/andy ....................... OK',
+    'Loading personality.dll ................... OK',
+    'Starting leaf_engine ...................... OK',
+    'Connecting to handball court .............. OK',
+    'Boot complete. Launching shell...',
+];
+
+const themes = ['default', 'matrix', 'dracula', 'light'];
+
+const openTargets = {
+    linkedin: 'https://www.linkedin.com/in/ahuanggg/',
+    github: 'https://github.com/ahuanggg',
+    instagram: 'https://www.instagram.com/a.huanggg/',
+    resume: '/resume.pdf',
+};
+
+const applyTheme = (name) => {
+    try {
+        if (name === 'default') {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('terminal-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', name);
+            localStorage.setItem('terminal-theme', name);
+        }
+    } catch (error) {
+        // storage unavailable — theme still applies for this page load
+    }
+};
+
 const Terminal = () => {
     const [input, setInput] = useState('');
-    const [history, setHistory] = useState(welcomeMessage);
+    const [history, setHistory] = useState(() => (sessionStorage.getItem('booted') ? welcomeMessage : []));
+    const [booting, setBooting] = useState(() => !sessionStorage.getItem('booted'));
+    const [snakeActive, setSnakeActive] = useState(false);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
@@ -41,15 +79,66 @@ const Terminal = () => {
     const [tabPrefix, setTabPrefix] = useState('');
     const terminalRef = useRef(null); // referencing terminal
     const inputRef = useRef(null); // referencing input
+    const didInit = useRef(false);
 
-    // List of possible commands
-    const possibleCommands = ['cat home.txt', 'cat about.txt', 'cat projects.txt', 'cat contact.txt', 'cat resume.txt', 'run jokeoftheday.js', 'run drawmesomething.js', 'run sendemail.js', 'ls', 'help', 'clear'];
+    // List of possible commands (sudo/exit are easter eggs — find them yourself!)
+    const possibleCommands = [
+        'cat home.txt',
+        'cat about.txt',
+        'cat projects.txt',
+        'cat contact.txt',
+        'cat resume.txt',
+        'run jokeoftheday.js',
+        'run drawmesomething.js',
+        'run sendemail.js',
+        'run snake.js',
+        'run guestbook.js',
+        'run guestbook.js sign ',
+        'ls',
+        'help',
+        'clear',
+        'history',
+        'whoami',
+        'pwd',
+        'date',
+        'echo ',
+        'open linkedin',
+        'open github',
+        'open instagram',
+        'open resume',
+        'theme matrix',
+        'theme dracula',
+        'theme light',
+        'theme default',
+    ];
 
     // Define content for directories
     const content = Content;
 
     // Define art for drawmesomething.js
     const art = Art;
+
+    // Apply saved theme + run the boot sequence once per browser session
+    useEffect(() => {
+        if (didInit.current) return;
+        didInit.current = true;
+        const savedTheme = localStorage.getItem('terminal-theme');
+        if (savedTheme && themes.includes(savedTheme)) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+        if (sessionStorage.getItem('booted')) return;
+        bootLines.forEach((line, i) => {
+            setTimeout(() => {
+                setHistory((prev) => [...prev, { type: 'html', value: line }]);
+            }, i * 220);
+        });
+        setTimeout(() => {
+            setHistory(welcomeMessage);
+            setBooting(false);
+            sessionStorage.setItem('booted', '1');
+            if (inputRef.current) inputRef.current.focus();
+        }, bootLines.length * 220 + 400);
+    }, []);
 
     // Leaf images to use for animation
     const leafImages = useMemo(() => ['leaf1.png', 'leaf2.png', 'leaf3.png'], []);
@@ -94,10 +183,36 @@ const Terminal = () => {
         animateText(0);
     };
 
+    const recordCommand = (command) => {
+        setCommandHistory((prev) => {
+            const updatedHistory = [...prev, command];
+            if (updatedHistory.length > 50) updatedHistory.shift();
+            return updatedHistory;
+        });
+        setHistoryIndex(-1);
+        setTabIndex(-1);
+    };
+
+    const exitSnake = (score) => {
+        setSnakeActive(false);
+        setHistory((prev) => [...prev, { type: 'html', value: `snake.js exited — final score: <span style='color:var(--accent-1);'>${score}</span> 🐍\n ` }]);
+        setTimeout(() => {
+            if (inputRef.current) inputRef.current.focus();
+        }, 0);
+    };
+
     const handleCommand = async (command) => {
         // Pressing enter on an empty line just echoes a new prompt, like a real terminal
         if (!command) {
             setHistory((prev) => [...prev, { type: 'html', value: '> ' }]);
+            return;
+        }
+
+        // snake takes over the terminal instead of printing output
+        if (command === 'run snake.js') {
+            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:var(--accent-2);'>run snake.js</span>` }, { type: 'html', value: `\n<span style='color:var(--accent-2);'>Running: snake.js</span> — eat the *, don't hit the walls!` }]);
+            setSnakeActive(true);
+            recordCommand(command);
             return;
         }
 
@@ -107,21 +222,47 @@ const Terminal = () => {
             output = { type: 'html', value: welcomeMessage.map((line) => line.value).join('\n') };
         } else if (command === 'clear') {
             setHistory([]);
-            setInput('');
-            setHistoryIndex(-1);
-            setTabIndex(-1);
-            setCommandHistory((prev) => {
-                const updatedHistory = [...prev, command];
-                if (updatedHistory.length > 10) updatedHistory.shift();
-                return updatedHistory;
-            });
+            recordCommand(command);
             return;
+        } else if (command === 'whoami') {
+            output = { type: 'html', value: `a curious visitor (we like those here)... but if you mean me: <span style='color:var(--accent-1);'>andy</span> — software engineer, NYC native, handball enthusiast, professional snack hunter (´▽\`)` };
+        } else if (command === 'pwd') {
+            output = { type: 'html', value: `/home/andy/${currentDirectory} — you're in my world now (◕‿◕)` };
+        } else if (command === 'date') {
+            output = { type: 'html', value: new Date().toString() };
+        } else if (command === 'history') {
+            const allCommands = [...commandHistory, command];
+            output = { type: 'html', value: allCommands.map((c, i) => `${String(i + 1).padStart(3, ' ')}  ${escapeHtml(c)}`).join('\n') };
+        } else if (command === 'exit') {
+            output = { type: 'html', value: `♪ you can check out any time you like, but you can never leave ♪\n(try '<i>clear</i>' if you want a fresh start)` };
+        } else if (command === 'sudo' || command.startsWith('sudo ')) {
+            output = { type: 'html', value: `nice try ( ఠ ͟ʖ ఠ)\nvisitor is not in the sudoers file. This incident will be reported to Andy.` };
+        } else if (command === 'echo' || command.startsWith('echo ')) {
+            output = { type: 'html', value: escapeHtml(command.slice(5).trim()) || ' ' };
+        } else if (command === 'open' || command.startsWith('open ')) {
+            if (arg && openTargets[arg]) {
+                window.open(openTargets[arg], '_blank', 'noopener');
+                output = { type: 'html', value: `opening <span style='color:var(--accent-1);'>${arg}</span> in a new tab...` };
+            } else if (arg) {
+                output = { type: 'html', value: `I don't know how to open '${escapeHtml(arg)}'\nyou can open: ${Object.keys(openTargets).map((t) => `<span style='color:var(--accent-1);'>${t}</span>`).join(' • ')}` };
+            } else {
+                output = { type: 'html', value: `usage: <span style='color:var(--accent-1);'>open {target}</span>\nyou can open: ${Object.keys(openTargets).map((t) => `<span style='color:var(--accent-1);'>${t}</span>`).join(' • ')}` };
+            }
+        } else if (command === 'theme' || command.startsWith('theme ')) {
+            if (arg && themes.includes(arg)) {
+                applyTheme(arg);
+                output = { type: 'html', value: `theme set to <span style='color:var(--accent-1);'>${arg}</span> ✨` };
+            } else if (arg) {
+                output = { type: 'html', value: `Theme not found: ${escapeHtml(arg)}\navailable themes: ${themes.join(' • ')}` };
+            } else {
+                output = { type: 'html', value: `usage: <span style='color:var(--accent-1);'>theme {name}</span>\navailable themes: ${themes.map((t) => `<span style='color:var(--accent-1);'>${t}</span>`).join(' • ')}` };
+            }
         } else if (command.startsWith('cat ') || command === 'cat') {
             if (arg && content[arg]) {
                 output = content[arg].type === 'html' ? content[arg] : { type: 'html', value: content[arg] };
                 setCurrentDirectory(arg);
             } else if (!arg) {
-                output = { type: 'html', value: `usage: <span style='color:#FCB26F;'>cat {file name}</span> — try '<span style='color:#FCB26F;'>cat home.txt</span>'` };
+                output = { type: 'html', value: `usage: <span style='color:var(--accent-1);'>cat {file name}</span> — try '<span style='color:var(--accent-1);'>cat home.txt</span>'` };
             } else {
                 output = { type: 'html', value: `File not found: ${escapeHtml(arg)}` };
             }
@@ -130,13 +271,14 @@ const Terminal = () => {
         } else if (command.startsWith('run ') || command === 'run') {
             const script = command.replace('run', '').trim();
             const emailMatch = command.match(/^run sendemail\.js (.+)$/);
+            const signMatch = command.match(/^run guestbook\.js sign (.+)$/);
             if (script === 'jokeoftheday.js') {
                 const results = await DadJoke('https://icanhazdadjoke.com/');
                 const joke = results && results.joke ? results.joke : 'I have ran out of jokes ૮(˶ㅠ︿ㅠ)ა ... try again in a little bit!';
-                output = { type: 'html', value: `\n<span style='color:#6fb9fc;'>Running: ${script}</span>\n---------------------------------\n${joke}\n ` };
+                output = { type: 'html', value: `\n<span style='color:var(--accent-2);'>Running: ${script}</span>\n---------------------------------\n${joke}\n ` };
             } else if (script === 'drawmesomething.js') {
                 let num = randomNumber(art.length);
-                output = { type: 'html', value: `\n<span style='color:#6fb9fc;'>Running: ${script}:</span>\n---------------------------------\n${art[num].value}\n ` };
+                output = { type: 'html', value: `\n<span style='color:var(--accent-2);'>Running: ${script}:</span>\n---------------------------------\n${art[num].value}\n ` };
             } else if (emailMatch) {
                 const body = emailMatch[1];
                 try {
@@ -146,9 +288,23 @@ const Terminal = () => {
                     output = { type: 'html', value: `---------------------------------\n ${error} \n` };
                 }
             } else if (script === 'sendemail.js') {
-                output = { type: 'html', value: `\n---------------------------------\nTo send me an email you have to add a message after '<span style='color:#FCB26F;'>run sendemail.js</span>' \nan example would be:\n'run sendemail.js Hi Andy, I really like your website and would like to connect with you! You can reach me @ {your email}\n<i style='color:#FCB26F;'>Please make sure to include a way for me to get back to you otherwise I wouldn't know who sent me the email!</i>\n` };
+                output = { type: 'html', value: `\n---------------------------------\nTo send me an email you have to add a message after '<span style='color:var(--accent-1);'>run sendemail.js</span>' \nan example would be:\n'run sendemail.js Hi Andy, I really like your website and would like to connect with you! You can reach me @ {your email}\n<i style='color:var(--accent-1);'>Please make sure to include a way for me to get back to you otherwise I wouldn't know who sent me the email!</i>\n` };
+            } else if (signMatch) {
+                const message = signMatch[1].slice(0, 200);
+                const count = signGuestbook(message);
+                output = { type: 'html', value: `---------------------------------\nThanks for signing! Your message is #${count} in this browser's guestbook ⸜(｡˃ ᵕ ˂ )⸝♡\ntype '<span style='color:var(--accent-2);'>run guestbook.js</span>' to read it back!\n` };
+            } else if (script === 'guestbook.js') {
+                const entries = getGuestbookEntries();
+                if (entries.length === 0) {
+                    output = { type: 'html', value: `---------------------------------\nThe guestbook is empty — be the first to sign it!\nusage: '<span style='color:var(--accent-2);'>run guestbook.js sign {your message}</span>'\n(entries are saved in this browser)\n` };
+                } else {
+                    const list = entries.map((e, i) => `${i + 1}. [${e.date}] ${escapeHtml(e.message)}`).join('\n');
+                    output = { type: 'html', value: `---------------------------------\n<span style='color:var(--accent-1);'>~ guestbook ~</span> (saved in this browser)\n${list}\n\nadd yours: '<span style='color:var(--accent-2);'>run guestbook.js sign {your message}</span>'\n` };
+                }
+            } else if (script.startsWith('guestbook.js')) {
+                output = { type: 'html', value: `to sign the guestbook: '<span style='color:var(--accent-2);'>run guestbook.js sign {your message}</span>'` };
             } else if (!script) {
-                output = { type: 'html', value: `usage: <span style='color:#6fb9fc;'>run {script name}</span> — try '<span style='color:#6fb9fc;'>run jokeoftheday.js</span>'` };
+                output = { type: 'html', value: `usage: <span style='color:var(--accent-2);'>run {script name}</span> — try '<span style='color:var(--accent-2);'>run jokeoftheday.js</span>'` };
             } else {
                 output = { type: 'html', value: `Script not found: ${escapeHtml(script)}` };
             }
@@ -158,9 +314,9 @@ const Terminal = () => {
 
         const echoedCommand = escapeHtml(command);
         if (command.startsWith('cat ')) {
-            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:#FCB26F;'>${echoedCommand}</span>` }, output]);
+            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:var(--accent-1);'>${echoedCommand}</span>` }, output]);
         } else if (command.startsWith('run ')) {
-            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:#6fb9fc;'>${echoedCommand}</span>` }, output]);
+            setHistory((prev) => [...prev, { type: 'html', value: `> <span style='color:var(--accent-2);'>${echoedCommand}</span>` }, output]);
         } else {
             setHistory((prev) => [...prev, { type: 'html', value: `> ${echoedCommand}` }, output]);
         }
@@ -172,13 +328,7 @@ const Terminal = () => {
             }, 5);
         }
 
-        setCommandHistory((prev) => {
-            const updatedHistory = [...prev, command];
-            if (updatedHistory.length > 10) updatedHistory.shift();
-            return updatedHistory;
-        });
-        setHistoryIndex(-1);
-        setTabIndex(-1);
+        recordCommand(command);
     };
 
     const handleInput = (e) => {
@@ -232,7 +382,7 @@ const Terminal = () => {
         if (terminalRef.current) {
             terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
         }
-    }, [history]);
+    }, [history, snakeActive]);
 
     return (
         <div>
@@ -243,6 +393,7 @@ const Terminal = () => {
                     {history.map((item, index) => (
                         <div key={index}>{item.type === 'html' ? <span dangerouslySetInnerHTML={{ __html: item.value }} /> : <span>{item.value}</span>}</div>
                     ))}
+                    {snakeActive && <Snake onExit={exitSnake} />}
                 </div>
                 <div className='input-area'>
                     <span>{`/ ${currentDirectory} > `}</span>
@@ -257,6 +408,7 @@ const Terminal = () => {
                         onKeyDown={handleInput}
                         className='terminal-input'
                         autoFocus
+                        disabled={booting || snakeActive}
                         aria-label='terminal command input'
                     />
                 </div>
