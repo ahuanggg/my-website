@@ -2,7 +2,7 @@
 //style='color:#6fb9fc;' blue
 
 const Content = {
-    'ls': { type: 'html', value: `---------------------------------\n- <span style='color:#FCB26F;'>home.txt</span>\n- <span style='color:#FCB26F;'>about.txt</span>\n- <span style='color:#FCB26F;'>projects.txt</span>\n- <span style='color:#FCB26F;'>resume.txt</span>\n- <span style='color:#6fb9fc;'>jokeoftheday.js\n- <span style='color:#6fb9fc;'>drawmesomething.js</span>\n- <span style='color:#6fb9fc;'>sendemail.js</span>\n` },
+    'ls': { type: 'html', value: `---------------------------------\n- <span style='color:#FCB26F;'>home.txt</span>\n- <span style='color:#FCB26F;'>about.txt</span>\n- <span style='color:#FCB26F;'>projects.txt</span>\n- <span style='color:#FCB26F;'>contact.txt</span>\n- <span style='color:#FCB26F;'>resume.txt</span>\n- <span style='color:#6fb9fc;'>jokeoftheday.js</span>\n- <span style='color:#6fb9fc;'>drawmesomething.js</span>\n- <span style='color:#6fb9fc;'>sendemail.js</span>\n` },
     'home.txt': {
         type: 'html',
         value: `
@@ -24,12 +24,12 @@ Welcome home ! <span style='color:pink'>
 ⠀⠀⠛⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⠦⢤⠤⠶⠋⠙⠳⣆⣀⣈⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 </span>
-From here you can type 'ls' to see what files you can print out or what scripts you can run! \nAnything that ends in a <span style='color:#FCB26F;'>.txt</span> can be used with the command '<span style='color:#FCB26F;'>cat</span>' ie: <span style='color:#FCB26F;'>cat about.txt</span> \nAnything that ends wih a <span style='color:#6fb9fc;'>.js</span> can be used with the command '<span style='color:#6fb9fc;'>run</span>' ie: <span style='color:#6fb9fc;'>run jokeoftheday.js</span>`,
+From here you can type 'ls' to see what files you can print out or what scripts you can run! \nAnything that ends in a <span style='color:#FCB26F;'>.txt</span> can be used with the command '<span style='color:#FCB26F;'>cat</span>' ie: <span style='color:#FCB26F;'>cat about.txt</span> \nAnything that ends with a <span style='color:#6fb9fc;'>.js</span> can be used with the command '<span style='color:#6fb9fc;'>run</span>' ie: <span style='color:#6fb9fc;'>run jokeoftheday.js</span>`,
     },
     'about.txt': {
         type: 'html',
         value: `
-Hi I’m <b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/" target="_blank"'>Andy Huang Ling</i></b></a> !!! 
+Hi I’m <b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.linkedin.com/in/ahuanggg/" target="_blank" rel="noreferrer">Andy Huang Ling</a></b> !!!
 ---------------------------------
 a New York City native with a passion for blending creativity and technology to craft engaging user experiences.
 
@@ -52,12 +52,12 @@ In my free time, you can usually find me on the handball court or hunting for th
 - Developed a web-based terminal interface using <b style='color:#6fb9fc;'><i>ReactJS</i></b>, <b style='color:#6fb9fc;'><i>JavaScript</i></b>, and <b style='color:#6fb9fc;'><i>CSS</i></b> to showcase professional experience, skills, and personal information.
 - Integrated <b style='color:#6fb9fc;'><i>REST API</i></b>  calls with <b style='color:#6fb9fc;'><i>Promises</i></b>  to dynamically fetch and display a "Joke of the Day" from a public endpoint.
 
-<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/junglejamrit/" target="_blank"'>Jungle Jam</a></b> | May 2022 | 
+<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://www.instagram.com/junglejamrit/" target="_blank" rel="noreferrer">Jungle Jam</a></b> | May 2022 | 
 - Collaborated with a team of 7 to develop an interactive game using <b style='color:#6fb9fc;'><i>Python</i></b>, <b style='color:#6fb9fc;'><i>OpenCV</i></b>, and <b style='color:#6fb9fc;'><i>PyGame</i></b>, where players use an oversized slingshot to launch food at projected jungle animals.
 - Developed object recognition functionality using <b style='color:#6fb9fc;'><i>OpenCV</i></b> to detect and track the thrown objects' position and impact.          
 - Designed and implemented gameplay features in <b style='color:#6fb9fc;'><i>PyGame</i></b>, incorporating object tracking and jungle-themed elements to enhance user engagement.
 
-<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://ahuanggg.github.io/my-website/chatroom.mp4" target="_blank"'>Online Chatroom</a></b> | April 2021 
+<b><a style="color: #FCB26F; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="/chatroom.mp4" target="_blank" rel="noreferrer">Online Chatroom</a></b> | April 2021 
 - Architected and developed a full-stack web application using <b style='color:#6fb9fc;'><i>ReactJS</i></b>, <b style='color:#6fb9fc;'><i>MongoDB</i></b>, <b style='color:#6fb9fc;'><i>Redis</i></b>, and <b style='color:#6fb9fc;'><i>Handlebars</i></b> to enable peer communication during the pandemic.
 - Designed and integrated user account management systems utilizing <b style='color:#6fb9fc;'><i>Promises</i></b> and <b style='color:#6fb9fc;'><i>REST APIs</i></b>, enhancing security and user experience.
 - Performed detailed end-to-end testing to ensure smooth and reliable integration across front-end and back-end components.
@@ -82,8 +82,8 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
 ---------------------------------
 
 <b>Software Engineer @ KeHE</b> | May 2023 - Present
-- Developed and enhanced UI components, including modals and interactive elements using <b style='color:#6fb9fc;'><i>AngularJS</i></b> and <b style='color:#6fb9fc;'><i>BootStrap</i></b>. Resulted in a 42% improvement in customer usabillity and satisfaction.
-- Build robust APIs with the <b style='color:#6fb9fc;'><i>.NET</i></b> Frame work, interfrated them with <b style='color:#6fb9fc;'><i>NySQL</i></b> to provide seamless front-end to back-end connectivity, significantly improving user experience.
+- Developed and enhanced UI components, including modals and interactive elements using <b style='color:#6fb9fc;'><i>AngularJS</i></b> and <b style='color:#6fb9fc;'><i>BootStrap</i></b>. Resulted in a 42% improvement in customer usability and satisfaction.
+- Built robust APIs with the <b style='color:#6fb9fc;'><i>.NET</i></b> Framework, integrated them with <b style='color:#6fb9fc;'><i>MySQL</i></b> to provide seamless front-end to back-end connectivity, significantly improving user experience.
 - Upgraded projects from <b style='color:#6fb9fc;'><i>.NET 2</i></b> to <b style='color:#6fb9fc;'><i>.NET 6</i></b>, improved security and refactored code to leverage new <b style='color:#6fb9fc;'><i>.NET 6</i></b> functions and libraries.
 - Generated over $24 million in revenue utilizing <b style='color:#6fb9fc;'><i>C#</i></b>, <b style='color:#6fb9fc;'><i>AngularJS</i></b>, <b style='color:#6fb9fc;'><i>BootStrap</i></b> and <b style='color:#6fb9fc;'><i>SQL</i></b> by handling ad-hoc project enhancements provided by stakeholders.
 
@@ -99,7 +99,7 @@ Get in touch: <a style="color: #FCB26F; text-decoration: none; font-weight: bold
 <b>Technical Skills</b> : Angular • React • TypeScript • C# • SQL • Python • HTML/CSS • .Net6 • Git
 <b>Programs</b> : Visual Studio Code • Visual Studio • Adobe Photoshop • Adobe Illustrator
 
-<a style="color: #FCB26F; font-size: 16px; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="https://ahuanggg.github.io/my-website/resume.pdf" target="_blank"'>full resume here!</a>
+<a style="color: #FCB26F; font-size: 16px; text-decoration: none; font-weight: bold; border-bottom: 2px solid transparent; transition: border-bottom 0.3s ease, color 0.3s ease;" onmouseover="this.style.borderBottom='2px solid #FCB26F';"  onmouseout="this.style.borderBottom='2px solid transparent';" href="/resume.pdf" target="_blank" rel="noreferrer">full resume here!</a>
 
 `,
     },

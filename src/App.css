@@ -194,6 +194,13 @@ html {
   }
 }
 
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .leaf {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .terminal-container {
     width: 90vw;

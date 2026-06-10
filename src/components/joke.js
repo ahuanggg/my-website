@@ -17,7 +17,7 @@ const dadJoke = async (url) => {
         return data;
     } catch (error) {
         console.error('Error when fetching data: ', error);
-        return 'Error fetching data';
+        return null;
     }
 };
 
