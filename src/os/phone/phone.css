@@ -1,0 +1,130 @@
+/* Phone-OS mode — early-smartphone-meets-XP. Rides on the .os-root vars. */
+
+.phone-root {
+  background: var(--xp-desktop-bg);
+}
+
+.phone-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 4px 12px;
+  padding-top: calc(4px + env(safe-area-inset-top));
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 11px;
+}
+
+.phone-statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.phone-statusbar .tray-clock {
+  font-size: 11px;
+}
+
+/* Home screen */
+.phone-home {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 12px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+
+.phone-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px 6px;
+}
+
+.phone-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 2px;
+  background: none;
+  border: none;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.phone-icon-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  font-size: 30px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.phone-icon-label {
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+  max-width: 76px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Open app */
+.phone-app-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  background: var(--xp-titlebar-active);
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.phone-app-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  background: var(--xp-face);
+}
+
+.phone-app-body > * {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.phone-navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 6px 0;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  background: var(--xp-taskbar);
+  border-top: 1px solid #0831d9;
+}
+
+.phone-nav-btn {
+  width: 64px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.phone-nav-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+}

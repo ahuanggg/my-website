@@ -1,11 +1,12 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Content from './content';
 import Art from './art';
 import DadJoke from './joke';
-import Leaf from './leaf';
 import Snake from './Snake';
 import { sendEmail } from './sendemail';
 import { getGuestbookEntries, signGuestbook } from './guestbook';
+import { useWindowFocus } from '../os/WindowContext';
+import { socials, resumeUrl } from '../data/profile';
 
 // accent colors are CSS variables so themes can restyle them:
 // var(--accent-1) orange (cat/files), var(--accent-2) blue (run/scripts)
@@ -47,30 +48,21 @@ const bootLines = [
 const themes = ['default', 'matrix', 'dracula', 'light'];
 
 const openTargets = {
-    linkedin: 'https://www.linkedin.com/in/ahuanggg/',
-    github: 'https://github.com/ahuanggg',
-    instagram: 'https://www.instagram.com/a.huanggg/',
-    resume: '/resume.pdf',
+    linkedin: socials.linkedin,
+    github: socials.github,
+    instagram: socials.instagram,
+    resume: resumeUrl,
 };
 
-const applyTheme = (name) => {
-    try {
-        if (name === 'default') {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.removeItem('terminal-theme');
-        } else {
-            document.documentElement.setAttribute('data-theme', name);
-            localStorage.setItem('terminal-theme', name);
-        }
-    } catch (error) {
-        // storage unavailable — theme still applies for this page load
-    }
-};
+// Touch screens get tap-to-type instead of autofocus/focus-grabbing —
+// otherwise the virtual keyboard pops and re-pops against the user's will
+const isCoarsePointer = () =>
+    typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
 
 const Terminal = () => {
     const [input, setInput] = useState('');
-    const [history, setHistory] = useState(() => (sessionStorage.getItem('booted') ? welcomeMessage : []));
-    const [booting, setBooting] = useState(() => !sessionStorage.getItem('booted'));
+    const [history, setHistory] = useState(() => (sessionStorage.getItem('terminalBooted') ? welcomeMessage : []));
+    const [booting, setBooting] = useState(() => !sessionStorage.getItem('terminalBooted'));
     const [snakeActive, setSnakeActive] = useState(false);
     const [currentDirectory, setCurrentDirectory] = useState('home');
     const [commandHistory, setCommandHistory] = useState([]);
@@ -79,7 +71,24 @@ const Terminal = () => {
     const [tabPrefix, setTabPrefix] = useState('');
     const terminalRef = useRef(null); // referencing terminal
     const inputRef = useRef(null); // referencing input
+    const rootRef = useRef(null); // theme attribute lives here so skins stay inside this window
     const didInit = useRef(false);
+    const focused = useWindowFocus(); // only the focused window may grab keystrokes
+
+    // Themes restyle only the terminal (data-theme on the terminal root, not <html>)
+    const applyTheme = (name) => {
+        try {
+            if (name === 'default') {
+                if (rootRef.current) rootRef.current.removeAttribute('data-theme');
+                localStorage.removeItem('terminal-theme');
+            } else {
+                if (rootRef.current) rootRef.current.setAttribute('data-theme', name);
+                localStorage.setItem('terminal-theme', name);
+            }
+        } catch (error) {
+            // storage unavailable — theme still applies for this page load
+        }
+    };
 
     // List of possible commands (sudo/exit are easter eggs — find them yourself!)
     const possibleCommands = [
@@ -123,10 +132,10 @@ const Terminal = () => {
         if (didInit.current) return;
         didInit.current = true;
         const savedTheme = localStorage.getItem('terminal-theme');
-        if (savedTheme && themes.includes(savedTheme)) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme && themes.includes(savedTheme) && rootRef.current) {
+            rootRef.current.setAttribute('data-theme', savedTheme);
         }
-        if (sessionStorage.getItem('booted')) return;
+        if (sessionStorage.getItem('terminalBooted')) return;
         bootLines.forEach((line, i) => {
             setTimeout(() => {
                 setHistory((prev) => [...prev, { type: 'html', value: line }]);
@@ -135,30 +144,10 @@ const Terminal = () => {
         setTimeout(() => {
             setHistory(welcomeMessage);
             setBooting(false);
-            sessionStorage.setItem('booted', '1');
-            if (inputRef.current) inputRef.current.focus();
+            sessionStorage.setItem('terminalBooted', '1');
+            if (inputRef.current && !isCoarsePointer()) inputRef.current.focus();
         }, bootLines.length * 220 + 400);
     }, []);
-
-    // Leaf images to use for animation
-    const leafImages = useMemo(() => ['leaf1.png', 'leaf2.png', 'leaf3.png'], []);
-    const [leaves, setLeaves] = useState([]);
-    useEffect(() => {
-        const generateLeafStyles = () => {
-            const leavesArray = [];
-            for (let i = 0; i < 6; i++) {
-                const randomLeft = Math.random() * 100;
-                const leafStyle = {
-                    left: `${randomLeft}vw`,
-                    animationDuration: `${Math.random() * 5 + 6}s`,
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/${leafImages[Math.floor(Math.random() * leafImages.length)]})`,
-                };
-                leavesArray.push(<Leaf key={i} style={leafStyle} />);
-            }
-            return leavesArray;
-        };
-        setLeaves(generateLeafStyles());
-    }, [leafImages]);
 
     // Function to return a random number
     const randomNumber = (max) => {
@@ -365,6 +354,9 @@ const Terminal = () => {
     };
 
     useEffect(() => {
+        // Only the focused window may pull keystrokes into its input, and never
+        // on touch screens (that would keep popping the virtual keyboard)
+        if (!focused || isCoarsePointer()) return;
         const handleKeyPress = (e) => {
             // Don't steal focus from browser shortcuts like Ctrl+C (copying terminal text)
             if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -376,7 +368,7 @@ const Terminal = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, []);
+    }, [focused]);
 
     useEffect(() => {
         if (terminalRef.current) {
@@ -385,35 +377,34 @@ const Terminal = () => {
     }, [history, snakeActive]);
 
     return (
-        <div>
-            {/* Terminal Container */}
-            <div className='terminal-container' onClick={() => inputRef.current && inputRef.current.focus()}>
-                <div className='terminal-header'>Andy's Terminal</div>
-                <div className='terminal' ref={terminalRef}>
-                    {history.map((item, index) => (
-                        <div key={index}>{item.type === 'html' ? <span dangerouslySetInnerHTML={{ __html: item.value }} /> : <span>{item.value}</span>}</div>
-                    ))}
-                    {snakeActive && <Snake onExit={exitSnake} />}
-                </div>
-                <div className='input-area'>
-                    <span>{`/ ${currentDirectory} > `}</span>
-                    <input
-                        type='text'
-                        value={input}
-                        ref={inputRef}
-                        onChange={(e) => {
-                            setInput(e.target.value);
-                            setTabIndex(-1);
-                        }}
-                        onKeyDown={handleInput}
-                        className='terminal-input'
-                        autoFocus
-                        disabled={booting || snakeActive}
-                        aria-label='terminal command input'
-                    />
-                </div>
+        <div className='terminal-container' ref={rootRef} onClick={() => inputRef.current && inputRef.current.focus()}>
+            <div className='terminal' ref={terminalRef}>
+                {history.map((item, index) => (
+                    <div key={index}>{item.type === 'html' ? <span dangerouslySetInnerHTML={{ __html: item.value }} /> : <span>{item.value}</span>}</div>
+                ))}
+                {snakeActive && <Snake onExit={exitSnake} />}
             </div>
-            {leaves}
+            <div className='input-area'>
+                <span>{`/ ${currentDirectory} > `}</span>
+                <input
+                    type='text'
+                    value={input}
+                    ref={inputRef}
+                    onChange={(e) => {
+                        setInput(e.target.value);
+                        setTabIndex(-1);
+                    }}
+                    onKeyDown={handleInput}
+                    className='terminal-input'
+                    autoFocus={!isCoarsePointer()}
+                    disabled={booting || snakeActive}
+                    aria-label='terminal command input'
+                    autoCapitalize='off'
+                    autoCorrect='off'
+                    autoComplete='off'
+                    spellCheck={false}
+                />
+            </div>
         </div>
     );
 };

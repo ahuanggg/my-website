@@ -1,0 +1,546 @@
+/* AndyOS shell — retro Windows XP/98 look, plain CSS, zero dependencies.
+   Shell chrome uses its own --xp-* vars; the terminal keeps its --terminal-* vars. */
+
+.os-root {
+  --xp-face: #ece9d8;
+  --xp-face-dark: #d4d0c8;
+  --xp-hilite: #ffffff;
+  --xp-light: #dfdfdf;
+  --xp-shadow: #808080;
+  --xp-dark: #404040;
+  --xp-blue: #0054e3;
+  --xp-blue-light: #3f8cf3;
+  --xp-titlebar-active: linear-gradient(180deg, #0058ee 0%, #3f8cf3 8%, #0054e3 40%, #0050ee 100%);
+  --xp-titlebar-inactive: linear-gradient(180deg, #89a7e0 0%, #a5bce8 8%, #7a96df 40%, #7a96df 100%);
+  --xp-taskbar: linear-gradient(180deg, #2f71e3 0%, #2663d6 6%, #245edb 50%, #1941a5 100%);
+  --xp-start-green: linear-gradient(180deg, #57b846 0%, #3f9e33 45%, #2e8425 100%);
+  --xp-desktop-bg: linear-gradient(160deg, #2f71e3 0%, #3a6ea5 45%, #274f7d 100%);
+
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: Tahoma, 'Segoe UI', Verdana, -apple-system, Roboto, sans-serif;
+  font-size: 12px;
+  user-select: none;
+}
+
+/* Bevel helpers */
+.xp-raised,
+.win-btn,
+.taskbar-button,
+.start-menu-item {
+  box-shadow: inset -1px -1px 0 var(--xp-dark), inset 1px 1px 0 var(--xp-hilite),
+    inset -2px -2px 0 var(--xp-shadow), inset 2px 2px 0 var(--xp-light);
+}
+
+/* ---------- Desktop ---------- */
+
+.desktop {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: var(--xp-desktop-bg);
+}
+
+.desktop-icons {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+  padding: 12px;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 84px;
+  padding: 8px 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: default;
+  color: #fff;
+  font: inherit;
+}
+
+.desktop-icon-glyph {
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.desktop-icon-label {
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+  padding: 1px 3px;
+}
+
+.desktop-icon--selected .desktop-icon-label {
+  background: rgba(11, 63, 161, 0.65);
+  outline: 1px dotted rgba(255, 255, 255, 0.7);
+}
+
+.desktop-icon:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: -1px;
+}
+
+/* ---------- Window chrome ---------- */
+
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  min-height: 80px;
+  background: var(--xp-face);
+  border: 3px solid #7a96df;
+  border-top: none;
+  border-radius: 8px 8px 3px 3px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.4);
+  overflow: visible;
+}
+
+.window--focused {
+  border-color: var(--xp-blue);
+}
+
+.window--minimized {
+  display: none;
+}
+
+.window--maximized {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  flex: 0 0 28px;
+  padding: 0 4px 0 7px;
+  margin: 0 -3px;
+  border-radius: 8px 8px 0 0;
+  background: var(--xp-titlebar-inactive);
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+  cursor: default;
+}
+
+.window--maximized .win-titlebar {
+  border-radius: 0;
+  margin: 0;
+}
+
+.window--focused .win-titlebar {
+  background: var(--xp-titlebar-active);
+}
+
+.win-title-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.win-title-text {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.win-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.win-btn {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #7ba1e8 0%, #3b6bd6 50%, #2a53b8 100%);
+  color: #fff;
+  cursor: default;
+}
+
+.win-btn:hover {
+  filter: brightness(1.15);
+}
+
+.win-btn:active {
+  filter: brightness(0.9);
+}
+
+.win-btn-close {
+  background: linear-gradient(180deg, #f0a086 0%, #e0603c 45%, #c33c14 100%);
+}
+
+.win-glyph {
+  display: block;
+  position: relative;
+}
+
+.win-glyph-min {
+  width: 8px;
+  height: 3px;
+  background: #fff;
+  align-self: flex-end;
+  margin-top: 8px;
+}
+
+.win-glyph-max {
+  width: 9px;
+  height: 8px;
+  border: 1px solid #fff;
+  border-top-width: 3px;
+}
+
+.win-glyph-restore {
+  width: 7px;
+  height: 6px;
+  border: 1px solid #fff;
+  border-top-width: 2px;
+  margin-top: 3px;
+}
+
+.win-glyph-restore::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 2px;
+  width: 7px;
+  height: 6px;
+  border: 1px solid #fff;
+  border-top-width: 2px;
+}
+
+.win-glyph-close {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  margin-top: -2px;
+}
+
+.win-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  background: var(--xp-face);
+  position: relative;
+}
+
+.win-body > * {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Resize handles — invisible strips along edges and corners */
+.win-resize {
+  position: absolute;
+  touch-action: none;
+  z-index: 5;
+}
+
+.win-resize-n,
+.win-resize-s {
+  left: 10px;
+  right: 10px;
+  height: 7px;
+  cursor: ns-resize;
+}
+
+.win-resize-n { top: -6px; }
+.win-resize-s { bottom: -6px; }
+
+.win-resize-e,
+.win-resize-w {
+  top: 10px;
+  bottom: 10px;
+  width: 7px;
+  cursor: ew-resize;
+}
+
+.win-resize-e { right: -6px; }
+.win-resize-w { left: -6px; }
+
+.win-resize-nw,
+.win-resize-ne,
+.win-resize-sw,
+.win-resize-se {
+  width: 14px;
+  height: 14px;
+}
+
+.win-resize-nw { top: -6px; left: -6px; cursor: nwse-resize; }
+.win-resize-se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+.win-resize-ne { top: -6px; right: -6px; cursor: nesw-resize; }
+.win-resize-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+
+/* ---------- Taskbar ---------- */
+
+.taskbar {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 36px;
+  flex: 0 0 36px;
+  background: var(--xp-taskbar);
+  border-top: 1px solid #0831d9;
+  z-index: 1000;
+}
+
+.start-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 18px 0 10px;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  margin-right: 8px;
+  background: var(--xp-start-green);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 1px 0 4px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 17px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+
+.start-button:hover {
+  filter: brightness(1.1);
+}
+
+.start-button--open {
+  filter: brightness(0.85);
+}
+
+.start-button-logo {
+  font-size: 18px;
+  font-style: normal;
+}
+
+.taskbar-buttons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  padding: 0 4px;
+}
+
+.taskbar-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  min-width: 0;
+  max-width: 160px;
+  flex: 0 1 160px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #4d84e8 0%, #3a70dd 50%, #2c5cc5 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.taskbar-button--active {
+  background: #1c48a8;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.taskbar-button-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.taskbar-tray {
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 14px;
+  background: linear-gradient(180deg, #1290e9 0%, #0b64c8 50%, #0a53a8 100%);
+  border-left: 1px solid #0831d9;
+  box-shadow: inset 1px 0 2px rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+
+.tray-clock {
+  font-size: 12px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Start menu ---------- */
+
+.start-menu {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  width: 240px;
+  background: #fff;
+  border: 1px solid #0831d9;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 3px -3px 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.start-menu-banner {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--xp-titlebar-active);
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.start-menu-items {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+}
+
+.start-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: #1c1c1c;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.start-menu-item:hover,
+.start-menu-item:focus-visible {
+  background: var(--xp-blue);
+  color: #fff;
+}
+
+.start-menu-icon {
+  font-size: 17px;
+  width: 20px;
+  text-align: center;
+}
+
+.start-menu-divider {
+  height: 1px;
+  margin: 3px 6px;
+  background: #d8d4c8;
+}
+
+/* ---------- Boot & shutdown screens ---------- */
+
+.boot-screen,
+.shutdown-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-family: Tahoma, 'Segoe UI', Verdana, sans-serif;
+}
+
+.boot-logo {
+  font-size: 44px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.boot-logo-accent {
+  color: #fcb26f;
+}
+
+.boot-tagline {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #9a9a9a;
+}
+
+.boot-progress {
+  margin-top: 42px;
+  width: 200px;
+  height: 16px;
+  border: 2px solid #7a7a7a;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.boot-progress-blocks {
+  display: flex;
+  gap: 3px;
+  height: 100%;
+  animation: boot-march 1.4s linear infinite;
+}
+
+.boot-progress-blocks span {
+  width: 12px;
+  background: linear-gradient(180deg, #4d84e8, #2452b8);
+  border-radius: 2px;
+}
+
+@keyframes boot-march {
+  0% { transform: translateX(-48px); }
+  100% { transform: translateX(200px); }
+}
+
+.shutdown-screen {
+  cursor: pointer;
+  text-align: center;
+  padding: 20px;
+}
+
+.shutdown-screen p {
+  color: #ffb400;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+.shutdown-screen .shutdown-hint {
+  color: #7a7a7a;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-progress-blocks {
+    animation: none;
+  }
+}

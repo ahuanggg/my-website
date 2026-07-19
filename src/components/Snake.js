@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useWindowFocus } from '../os/WindowContext';
 
 const COLS = 24;
 const ROWS = 14;
@@ -29,8 +30,11 @@ const Snake = ({ onExit }) => {
     const [, setTick] = useState(0); // re-render trigger, game state lives in the ref
     const onExitRef = useRef(onExit);
     onExitRef.current = onExit;
+    // pause + release the controls whenever this window isn't the focused one
+    const focused = useWindowFocus();
 
     useEffect(() => {
+        if (!focused) return;
         const step = () => {
             const g = gameRef.current;
             if (g.over) return;
@@ -60,7 +64,8 @@ const Snake = ({ onExit }) => {
 
         const handleKey = (e) => {
             const g = gameRef.current;
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) e.preventDefault();
+            // Escape is consumed here (quit game) so the shell doesn't also close the window
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Escape'].includes(e.key)) e.preventDefault();
             if (g.over) {
                 if (e.key === 'r' || e.key === 'R') {
                     gameRef.current = initialState();
@@ -93,16 +98,17 @@ const Snake = ({ onExit }) => {
         };
 
         const interval = setInterval(step, TICK_MS);
-        window.addEventListener('keydown', handleKey);
+        // capture phase so the game consumes Escape before the shell's close-on-Escape sees it
+        window.addEventListener('keydown', handleKey, true);
         window.addEventListener('touchstart', handleTouchStart);
         window.addEventListener('touchend', handleTouchEnd);
         return () => {
             clearInterval(interval);
-            window.removeEventListener('keydown', handleKey);
+            window.removeEventListener('keydown', handleKey, true);
             window.removeEventListener('touchstart', handleTouchStart);
             window.removeEventListener('touchend', handleTouchEnd);
         };
-    }, []);
+    }, [focused]);
 
     const g = gameRef.current;
     const rows = [];
