@@ -1,6 +1,9 @@
-/* Theme variables — switched at runtime by the 'theme' command */
+/* Terminal styling. The terminal lives inside an AndyOS window (see src/os/os.css
+   for the shell). Theme variables are scoped to the terminal root so the 'theme'
+   command skins only the terminal window, never the OS chrome. */
+
 :root {
-  --terminal-bg: rgba(30, 30, 30, 0.85);
+  --terminal-bg: rgba(30, 30, 30, 0.97);
   --terminal-text: whitesmoke;
   --header-bg: #333;
   --input-bg: #1e1e1e;
@@ -9,8 +12,8 @@
   --accent-2: #6fb9fc;
 }
 
-[data-theme='matrix'] {
-  --terminal-bg: rgba(0, 12, 2, 0.92);
+.terminal-container[data-theme='matrix'] {
+  --terminal-bg: rgba(0, 12, 2, 0.98);
   --terminal-text: #00ff41;
   --header-bg: #001a06;
   --input-bg: #001204;
@@ -19,8 +22,8 @@
   --accent-2: #00e636;
 }
 
-[data-theme='dracula'] {
-  --terminal-bg: rgba(40, 42, 54, 0.92);
+.terminal-container[data-theme='dracula'] {
+  --terminal-bg: rgba(40, 42, 54, 0.98);
   --terminal-text: #f8f8f2;
   --header-bg: #1e1f29;
   --input-bg: #21222c;
@@ -29,8 +32,8 @@
   --accent-2: #8be9fd;
 }
 
-[data-theme='light'] {
-  --terminal-bg: rgba(252, 250, 245, 0.92);
+.terminal-container[data-theme='light'] {
+  --terminal-bg: rgba(252, 250, 245, 0.98);
   --terminal-text: #2a2a2a;
   --header-bg: #e8e4da;
   --input-bg: #efece4;
@@ -39,74 +42,40 @@
   --accent-2: #1c6fc2;
 }
 
-/* Body Background with the Image */
+html,
 body {
-  background: url("./../public/background.png") no-repeat center center fixed; 
-  background-size: cover; 
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  overflow: hidden;
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
-  position: relative;
-}
-
-html {
-  width: 100%;
   height: 100%;
-  overflow: hidden; 
-  position: relative;
-  margin: 0;
-  padding: 0;
-  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* Terminal Container */
+/* Terminal Container — fluid, sized by whatever window it lives in */
 .terminal-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 70vh;
-  width: 60vw;  
+  height: 100%;
+  width: 100%;
   background-color: var(--terminal-bg);
   color: var(--terminal-text);
-  border-radius: 10px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-  margin: 0 auto;
-  position: relative;
-  top: 15vh;
-}
-
-/* Terminal Header */
-.terminal-header {
-  width: 100%;
-  background-color: var(--header-bg);
-  color: var(--terminal-text);
-  text-align: center;
-  font-family: Consolas, 'Courier New', monospace;
-  font-size: 20px; 
-  padding: 10px 0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom: 1px solid var(--border-color);
+  box-sizing: border-box;
 }
 
 /* Terminal Scrollable Content */
 .terminal {
   flex-grow: 1;
   width: 100%;
-  overflow-y: auto; 
+  overflow-y: auto;
   font-family: Consolas, 'Courier New', monospace;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   white-space: pre-wrap;
-  padding: 10px; 
-  box-sizing: border-box; 
+  padding: 10px;
+  box-sizing: border-box;
   padding-left: 15px;
 }
 
@@ -114,7 +83,7 @@ html {
 .input-area {
   display: flex;
   width: 100%;
-  font-family: Consolas, 'Courier New', monospace; 
+  font-family: Consolas, 'Courier New', monospace;
   font-size: 16px;
   color: var(--terminal-text);
   background-color: var(--input-bg);
@@ -128,7 +97,7 @@ html {
   margin-right: 5px;
 }
 
-/* Terminal Input */
+/* Terminal Input — 16px minimum so iOS doesn't zoom on focus */
 .terminal-input {
   flex-grow: 1;
   background: transparent;
@@ -138,6 +107,7 @@ html {
   font-size: 16px;
   outline: none;
   padding-left: 10px;
+  min-width: 0;
 }
 
 /* Custom scrollbar styles for a round, macOS-like feel */
@@ -184,128 +154,13 @@ html {
   color: var(--accent-1);
 }
 
-
-/* Container for the background */
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  z-index: -2;
-}
-
-/* Static background image */
-.background-image {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-image: url("./../public/background.png");
-  background-size: cover;
-  background-position: bottom center;
-  z-index: -2;
-}
-
-
-/* Leaf layer */
-.leaves {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.leaf {
-  position: absolute;
-  top: -50px; 
-  width: 30px; 
-  height: 30px;
-  background-size: contain;
-  background-repeat: no-repeat; 
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.65;
-  animation: fall 8s linear infinite, sway ease-in-out infinite alternate;
-}
-
-/* Falling animation */
-@keyframes fall {
-  0% {
-    top: -50px; 
-    transform: rotate(0deg);
-  }
-  100% {
-    top: 100%;
-    transform: rotate(360deg); 
-  }
-}
-
-/* Swaying animation */
-@keyframes sway {
-  0% {
-    transform: translateX(0px);
-  }
-  100% {
-    transform: translateX(150px);
-  }
-}
-
-/* Respect users who prefer less motion */
-@media (prefers-reduced-motion: reduce) {
-  .leaf {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .terminal-container {
-    width: 90vw;
-    height: 60vh;
-    border-radius: 8px;
-  }
-
-  .terminal-header {
-    font-size: 18px;
-    padding: 8px 0;
-  }
-
-  .terminal {
-    font-size: 12px; 
-    padding: 8px; 
-  }
-
-  .input-area {
-    font-size: 14px; 
-    padding: 8px; 
-  }
-
-  .terminal-input {
-    font-size: 14px; 
-    padding-left: 8px; 
-  }
-}
-
 @media (max-width: 480px) {
-  .terminal-container {
-    width: 95vw; 
-    height: 50vh;
-    top: 20vh;
-  }
-
   .terminal {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .snake-board {
     font-size: 10px;
-    padding: 6px;
-  }
-
-  .input-area {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  .terminal-input {
-    font-size: 12px;
-    padding-left: 6px;
   }
 }
