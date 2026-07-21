@@ -271,8 +271,8 @@ const Terminal = () => {
             } else if (emailMatch) {
                 const body = emailMatch[1];
                 try {
-                    const result = await sendEmail(body);
-                    output = { type: 'html', value: `---------------------------------\n ${result} \n` };
+                    const result = await sendEmail({ message: body });
+                    output = { type: 'html', value: `---------------------------------\n ${result.message} \n` };
                 } catch (error) {
                     output = { type: 'html', value: `---------------------------------\n ${error} \n` };
                 }

@@ -60,12 +60,14 @@ export const projects = [
     },
     {
         name: 'Personal Website',
-        date: 'Sept 2022',
+        date: 'Sept 2022 - Present',
         bullets: [
-            'Developed a web-based terminal interface using **ReactJS**, **JavaScript**, and **CSS** to showcase professional experience, skills, and personal information.',
-            'Integrated **REST API** calls with **Promises** to dynamically fetch and display a "Joke of the Day" from a public endpoint.',
+            'Rebuilt the site from a single terminal component into **AndyOS**, a Windows XP-style desktop environment with a hand-rolled window manager — drag, 8-direction resize, minimize/maximize/restore, z-order, a taskbar, Start menu, and boot screen — driven by a framework-agnostic **useReducer** state machine with zero added npm dependencies.',
+            'Engineered 60fps window drag/resize from scratch with raw **Pointer Events**: during a gesture, position updates write straight to the DOM inside **requestAnimationFrame** and React only receives a single dispatch on pointer release, keeping the drag loop off the render path entirely.',
+            'Added a responsive phone-OS mode (**matchMedia**, sub-768px) that reuses the same window-manager reducer through a completely different renderer — icon-grid home screen, fullscreen apps, back/home/close navigation — with a single app registry as the contract between the shell and all seven apps.',
+            'Preserved the original terminal as an in-OS Command Prompt app, added in-window **Snake** and **Minesweeper** games, covered the window manager and shell with **Jest** unit tests, and wired up **GitHub Actions** CI/CD to auto-build and deploy to GitHub Pages on every push to main.',
         ],
-        note: "you're looking at it right now!",
+        note: "you're using it right now — this whole desktop is the website!",
     },
     {
         name: 'Jungle Jam',

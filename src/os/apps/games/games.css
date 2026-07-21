@@ -1,0 +1,341 @@
+/* Styling for the Games app: the launcher plus Snake and Minesweeper.
+   Reuses .xp-app/.xp-btn/.xp-statusbar/.xp-muted from app-chrome.css and
+   the .xp-raised bevel helper from os.css (both already loaded globally);
+   only genuinely game-specific rules live here. */
+
+/* Shared sunken-panel bevel — the inverse of os.css's .xp-raised, namespaced
+   here (rather than added to the shared xp-* vocabulary) to stay out of the
+   way of concurrent edits elsewhere in the shell. */
+.games-bevel-in {
+  box-shadow:
+    inset -1px -1px 0 var(--xp-hilite, #fff),
+    inset 1px 1px 0 var(--xp-dark, #404040),
+    inset -2px -2px 0 var(--xp-light, #dfdfdf),
+    inset 2px 2px 0 var(--xp-shadow, #808080);
+}
+
+/* ---------- Launcher ---------- */
+
+.games-app {
+  padding: 0;
+}
+
+.games-launcher {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 14px;
+  gap: 10px;
+  overflow: auto;
+}
+
+.games-launcher-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: #003c74;
+}
+
+.games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.games-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  color: #1c1c1c;
+  background: #fff;
+  border: 1px solid #aca899;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.games-list-item:hover {
+  background: #e9f1ff;
+  border-color: var(--xp-blue, #0054e3);
+}
+
+.games-list-item:active {
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.games-list-icon {
+  font-size: 30px;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.games-list-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.games-list-name {
+  font-weight: bold;
+}
+
+.games-list-desc {
+  color: #555;
+  font-size: 11px;
+}
+
+.games-list-score {
+  color: #a1590f;
+  font-size: 11px;
+}
+
+/* ---------- Snake ---------- */
+
+.snake-app {
+  padding: 0;
+}
+
+.snake-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  border-bottom: 1px solid #aca899;
+  background: linear-gradient(180deg, #fdfcfb 0%, #ece9d8 100%);
+}
+
+.snake-hint {
+  font-size: 11px;
+}
+
+.snake-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: var(--xp-face, #ece9d8);
+}
+
+.snake-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 24 / 18;
+  background: #f4f6ec;
+}
+
+.snake-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.snake-overlay-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 180px;
+  padding: 18px 22px;
+  border-radius: 3px;
+  background: var(--xp-face, #ece9d8);
+  text-align: center;
+}
+
+.snake-overlay-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #003c74;
+  margin-bottom: 4px;
+}
+
+.snake-overlay-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.snake-dpad {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 3px;
+  opacity: 0.88;
+}
+
+.snake-dpad-btn {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  border-radius: 4px;
+  background: var(--xp-face, #ece9d8);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.snake-dpad-btn:active {
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.snake-dpad-up { grid-column: 2; grid-row: 1; }
+.snake-dpad-left { grid-column: 1; grid-row: 2; }
+.snake-dpad-right { grid-column: 3; grid-row: 2; }
+.snake-dpad-down { grid-column: 2; grid-row: 3; }
+
+/* ---------- Minesweeper ---------- */
+
+.ms-app {
+  padding: 0;
+}
+
+.ms-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  border-bottom: 1px solid #aca899;
+  background: linear-gradient(180deg, #fdfcfb 0%, #ece9d8 100%);
+}
+
+.ms-diff-group {
+  display: flex;
+  gap: 4px;
+}
+
+.ms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 10px;
+  background: var(--xp-face-dark, #d4d0c8);
+}
+
+.ms-led {
+  min-width: 56px;
+  padding: 3px 6px;
+  background: #000;
+  color: #ff2b2b;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-align: right;
+}
+
+.ms-smiley {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: var(--xp-face, #ece9d8);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ms-smiley:active {
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+.ms-board-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+  background: var(--xp-face-dark, #d4d0c8);
+}
+
+.ms-board {
+  --ms-cell-size: 22px;
+  display: inline-grid;
+  gap: 0;
+  padding: 3px;
+  background: var(--xp-face-dark, #d4d0c8);
+}
+
+.ms-board--over .ms-cell {
+  pointer-events: none;
+}
+
+.ms-cell {
+  width: var(--ms-cell-size, 22px);
+  height: var(--ms-cell-size, 22px);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Tahoma, 'Segoe UI', Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--xp-face, #ece9d8);
+  border: none;
+  cursor: default;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.ms-cell--revealed {
+  background: var(--xp-face-dark, #d4d0c8);
+  box-shadow: inset 0 0 0 1px #b8b49f;
+}
+
+.ms-cell--mine {
+  background: #e5a1a1;
+}
+
+.ms-cell--exploded {
+  background: #ff4040;
+}
+
+.ms-cell--wrong::after {
+  content: '\2715';
+  position: absolute;
+  color: #d21f1f;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.ms-cell--num-1 { color: #0000fe; }
+.ms-cell--num-2 { color: #008200; }
+.ms-cell--num-3 { color: #fe0000; }
+.ms-cell--num-4 { color: #000084; }
+.ms-cell--num-5 { color: #840000; }
+.ms-cell--num-6 { color: #008284; }
+.ms-cell--num-7 { color: #000000; }
+.ms-cell--num-8 { color: #808080; }

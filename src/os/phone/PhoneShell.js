@@ -1,6 +1,7 @@
 import React from 'react';
 import { useWindowManager } from '../WindowManagerContext';
 import { topmost } from '../windowManager';
+import Wallpaper from '../Wallpaper';
 import PhoneStatusBar from './PhoneStatusBar';
 import PhoneHome from './PhoneHome';
 import PhoneApp from './PhoneApp';
@@ -15,6 +16,9 @@ const PhoneShell = () => {
 
     return (
         <div className='os-root phone-root'>
+            <div className='phone-wallpaper' aria-hidden='true'>
+                <Wallpaper />
+            </div>
             <PhoneStatusBar />
             {active ? <PhoneApp win={active} /> : <PhoneHome />}
         </div>
