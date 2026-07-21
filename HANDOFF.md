@@ -1,6 +1,6 @@
 # AndyOS Redesign — Knowledge Transfer / Handoff
 
-_Last updated: 2026-07-20. Work lives on `desktop-os`, with a follow-up branch `xp-apps-refresh` on top of it (graphical Snake, Minesweeper, Bliss wallpaper, Web3Forms contact form). Nothing is pushed or deployed yet._
+_Last updated: 2026-07-20. The original AndyOS rebuild (`desktop-os`) was merged to `main` via PR #4 and **is live on andyhuangling.com**. A follow-up branch `xp-apps-refresh` sits on top of `main` — graphical Snake, Minesweeper, Bliss wallpaper, Web3Forms contact form — and is committed locally but not yet pushed._
 
 ## What this project was
 
@@ -12,7 +12,8 @@ The full design rationale is in `DESKTOP_OS_PLAN.md` (committed to the repo, pro
 
 - **25/25 jest tests pass** (5 suites), `npm run build` compiles clean (~80KB gzipped JS).
 - Manually verified in a live browser: window drag (with bounds clamping), 8-direction resize, minimize/maximize/restore, multi-window z-order and click-to-front, Start menu + click-away close + Shut Down easter egg, terminal commands, theme scoping, Escape-to-close, phone↔desktop live mode switching with open windows surviving the flip, Resume app swapping PDF-iframe↔HTML by mode, Projects video `preload=none`/`playsInline`, boot-once-per-session flag. Zero console errors.
-- **NOT done:** pushing the branch, opening the PR, merging (merge auto-deploys the live site), and Andy's manual QA on real devices (iOS Safari / Android Chrome). These were intentionally left for the owner.
+- **Shipped:** `desktop-os` merged to `main` via PR #4; the Deploy to GitHub Pages run succeeded and the site is live.
+- **NOT done:** pushing `xp-apps-refresh` / opening its PR (merge auto-deploys the live site), and Andy's manual QA on real devices (iOS Safari / Android Chrome). These were intentionally left for the owner.
 
 ## Architecture in 60 seconds
 
@@ -69,7 +70,7 @@ Key decisions (all deliberate — don't casually undo):
 
 1. `npm start`, look at it with human eyes (XP styling was verified structurally, not visually).
 2. QA on a real phone: terminal tap-to-type, Snake swipe, resume HTML fallback, form focus without zoom, safe-area padding.
-3. `git push -u origin desktop-os` → open PR → merge → watch the Actions run → confirm andyhuangling.com (+ that the domain still resolves).
+3. ~~Push `desktop-os` → PR → merge~~ **done** (PR #4, deployed). Same dance for `xp-apps-refresh`: `git push -u origin xp-apps-refresh` → open PR → merge → watch the Actions run → confirm andyhuangling.com (+ that the domain still resolves).
 4. Send yourself one message through Contact Andy to confirm Web3Forms delivery end-to-end (nobody has actually posted to the live endpoint yet).
 5. Post-MVP parked ideas: dad-joke app (`joke.js` is ready, ~1-2 hrs), phone task switcher, more games in the launcher.
 
