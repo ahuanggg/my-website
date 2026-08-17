@@ -45,8 +45,8 @@ export const APPS = {
         title: 'Games',
         icon: '🎮',
         component: GamesApp,
-        defaultSize: { w: 440, h: 440 },
-        minSize: { w: 340, h: 360 },
+        defaultSize: { w: 560, h: 560 },
+        minSize: { w: 380, h: 420 },
         singleton: true,
     },
     contact: {

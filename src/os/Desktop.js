@@ -4,6 +4,7 @@ import { APPS, DESKTOP_ICONS } from './apps/registry';
 import DesktopIcon from './DesktopIcon';
 import Window from './Window';
 import Taskbar from './Taskbar';
+import Wallpaper from './Wallpaper';
 
 const Desktop = () => {
     const { state, dispatch, openApp, boundsRef } = useWindowManager();
@@ -49,6 +50,9 @@ const Desktop = () => {
     return (
         <div className='os-root'>
             <div className='desktop' ref={desktopRef} onPointerDown={clearSelection}>
+                <div className='desktop-wallpaper' aria-hidden='true'>
+                    <Wallpaper />
+                </div>
                 <div className='desktop-icons'>
                     {DESKTOP_ICONS.map((appId) => (
                         <DesktopIcon
